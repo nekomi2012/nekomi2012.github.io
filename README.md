@@ -1,65 +1,58 @@
-# jQuery
+[![Join the chat at https://gitter.im/moment/moment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/moment/moment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-> jQuery is a fast, small, and feature-rich JavaScript library.
+[![NPM version][npm-version-image]][npm-url] [![NPM downloads][npm-downloads-image]][npm-url] [![MIT License][license-image]][license-url] [![Build Status][travis-image]][travis-url]
+[![Coverage Status](https://coveralls.io/repos/moment/moment/badge.svg?branch=develop)](https://coveralls.io/r/moment/moment?branch=develop)
 
-For information on how to get started and how to use jQuery, please see [jQuery's documentation](http://api.jquery.com/).
-For source files and issues, please visit the [jQuery repo](https://github.com/jquery/jquery).
+A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates.
 
-## Including jQuery
+**[Documentation](http://momentjs.com/docs/)**
 
-Below are some of the most common ways to include jQuery.
+## Port to ECMAScript 6 (version 2.10.0)
 
-### Browser
+Moment 2.10.0 does not bring any new features, but the code is now written in
+ECMAScript 6 modules and placed inside `src/`. Previously `moment.js`, `locale/*.js` and
+`test/moment/*.js`, `test/locale/*.js` contained the source of the project. Now
+the source is in `src/`, temporary build (ECMAScript 5) files are placed under
+`build/umd/` (for running tests during development), and the `moment.js` and
+`locale/*.js` files are updated only on release.
 
-#### Script tag
+If you want to use a particular revision of the code, make sure to run
+`grunt transpile update-index`, so `moment.js` and `locales/*.js` are synced
+with `src/*`. We might place that in a commit hook in the future.
 
-```html
-<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-```
+## Upgrading to 2.0.0
 
-#### Babel
+There are a number of small backwards incompatible changes with version 2.0.0. [See the full descriptions here](https://gist.github.com/timrwood/e72f2eef320ed9e37c51#backwards-incompatible-changes)
 
-[Babel](http://babeljs.io/) is a next generation JavaScript compiler. One of the features is the ability to use ES6/ES2015 modules now, even though browsers do not yet support this feature natively.
+ * Changed language ordinal method to return the number + ordinal instead of just the ordinal.
 
-```js
-import $ from "jquery";
-```
+ * Changed two digit year parsing cutoff to match strptime.
 
-#### Browserify/Webpack
+ * Removed `moment#sod` and `moment#eod` in favor of `moment#startOf` and `moment#endOf`.
 
-There are several ways to use [Browserify](http://browserify.org/) and [Webpack](https://webpack.github.io/). For more information on using these tools, please refer to the corresponding project's documention. In the script, including jQuery will usually look like this...
+ * Removed `moment.humanizeDuration()` in favor of `moment.duration().humanize()`.
 
-```js
-var $ = require("jquery");
-```
+ * Removed the lang data objects from the top level namespace.
 
-#### AMD (Asynchronous Module Definition)
+ * Duplicate `Date` passed to `moment()` instead of referencing it.
 
-AMD is a module format built for the browser. For more information, we recommend [require.js' documentation](http://requirejs.org/docs/whyamd.html).
+## [Changelog](https://github.com/moment/moment/blob/develop/CHANGELOG.md)
 
-```js
-define(["jquery"], function($) {
+## [Contributing](https://github.com/moment/moment/blob/develop/CONTRIBUTING.md)
 
-});
-```
+We're looking for co-maintainers! If you want to become a master of time please
+write to [ichernev](https://github.com/ichernev).
 
-### Node
+## License
 
-To include jQuery in [Node](nodejs.org), first install with npm.
+Moment.js is freely distributable under the terms of the [MIT license](https://github.com/moment/moment/blob/develop/LICENSE).
 
-```sh
-npm install jquery
-```
+[license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
+[license-url]: LICENSE
 
-For jQuery to work in Node, a window with a document is required. Since no such window exists natively in Node, one can be mocked by tools such as [jsdom](https://github.com/tmpvar/jsdom). This can be useful for testing purposes.
+[npm-url]: https://npmjs.org/package/moment
+[npm-version-image]: http://img.shields.io/npm/v/moment.svg?style=flat
+[npm-downloads-image]: http://img.shields.io/npm/dm/moment.svg?style=flat
 
-```js
-require("jsdom").env("", function(err, window) {
-	if (err) {
-		console.error(err);
-		return;
-	}
-
-	var $ = require("jquery")(window);
-});
-```
+[travis-url]: http://travis-ci.org/moment/moment
+[travis-image]: http://img.shields.io/travis/moment/moment/develop.svg?style=flat
