@@ -1,57 +1,105 @@
 {
-  "name": "requestify",
-  "description": "Simplifies node HTTP request making (HTTP client) with caching support.",
-  "version": "0.2.5",
-  "scripts": {
-    "test": "mocha -R spec test/**/*.js test/*.js"
-  },
-  "license": "MIT",
-  "tags": [
-    "http",
-    "request",
-    "http-request",
-    "simple",
-    "web services",
-    "util",
-    "http client",
-    "client",
-    "request client",
-    "http cache",
-    "cache",
-    "HTTP caching"
-  ],
+  "name": "jquery",
+  "title": "jQuery",
+  "description": "JavaScript library for DOM operations",
+  "version": "3.1.1",
+  "main": "dist/jquery.js",
+  "homepage": "https://jquery.com",
   "author": {
-    "name": "Ran Mizrahi",
-    "email": "ranm@cocycles.com"
-  },
-  "dependencies": {
-    "jquery": "^3.1.0",
-    "q": "^0.9.7",
-    "underscore": "^1.8.3"
-  },
-  "devDependencies": {
-    "chai": "^3.5.0",
-    "mocha": "^1.9.0",
-    "rewire": "^1.1.3",
-    "sinon": "^1.7.3",
-    "sinon-chai": "^2.4.0"
+    "name": "jQuery Foundation and other contributors",
+    "url": "https://github.com/jquery/jquery/blob/3.1.1/AUTHORS.txt"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ranm8/requestify.git"
+    "url": "https://github.com/jquery/jquery.git"
   },
-  "engines": {
-    "node": "~0.10.x"
-  },
-  "readme": "Requestify - Simplifies node HTTP request making. [![Build Status](https://secure.travis-ci.org/ranm8/requestify.png?branch=master)](http://travis-ci.org/ranm8/requestify)\n==============================================\n\nRequestify is a super easy to use and extendable HTTP client for nodeJS + it supports cache (-:.\n\n## Installation\n\n\tnpm install requestify  \n\n## How to use?\n\nRequestify is extremely easy to use and always return a promise (using the amazing Q module)...\n\nSimply require the module and start requesting:\n\n``` javascript\nvar requestify = require('requestify'); \n```\nGET Request:\n\n``` javascript\nrequestify.get('http://example.com').then(function(response) {\n\t// Get the response body\n\tresponse.getBody();\n});\n```\n\nPOST Request in JSON:\n\n``` javascript\nrequestify.post('http://example.com', {\n\t\thello: 'world'\n\t})\n\t.then(function(response) {\n\t\t// Get the response body (JSON parsed or jQuery object for XMLs)\n\t\tresponse.getBody();\n\t\t\n\t\t// Get the raw response body\n\t\tresponse.body;\n\t});\n```\n\n## Configuration methods\n\n### requestify.setEncoding(encoding)\n\nSets Requestify's encoding. Requestify will use this encoding to decode the responses.\nDefaults to utf8.\n\n```javascript\nrequestify.setEncoding('utf8'); // utf8 is set by default anyway.\n```\n\n### requestify.cacheTransporter(cacheTransporter)\n\nSets the cache transporter for Requestify's use. Requestify will use this transporter for caching the desired HTTP responses.\nFor using one of Requestify's core transporter use the core transporters object (`coreCacheTransporters`).\nPLEASE NOTE: the inMemory() transporter is set by default.\n\nFor example:\n\n```javascript\nvar coreCacheTransporters = requestify.coreCacheTransporters;\nrequestify.cacheTransporter(coreCacheTransporters.inMemory()); // set simple in-memory caching (set by default)\nrequestify.cacheTransporter(coreCacheTransporters.redis(myRedisInstance)); // Set the core Redis cache transporter, or\nrequestify.cacheTransporter(coreCacheTransporters.mongo(myMongooseInstance)); // set the core Mongo cache transporter\n```\n\nYou can implement your own cache transporters (@see docs below)\n\n### requestify.redis(redisInstance) - @depercated\n\nSets Redis client instance. Requestify will use that instance for caching responses.\nPlease note, Requestify will NOT cache anything by default and caching is allowed only for GET requests (see @cache options for further info).\n\nPLEASE NOTE, this method is only a shorthand for using `requestify.cacheTransporter(coreCacheTransporters.redis(myRedisInstance));`\n\n```javascript\nvar redis = require('redis');\n\nrequestify.redis(redis.createClient());\n```\n\n## API Reference\n\n### options\n\n#### `method {string}` \nHTTP method to use, can be any valid HTTP method (e.g. POST, GET, DELETE, HEAD, PUT, etc.).\n\n#### `body {object|string}`\nCan be either an object (key, val) or a string, will be formatted depending on the dataType property and served via request body.\n\n#### `params {object}`\nObject of key-value params, will be encoded to url encoded string and added as the request query string.\n\n#### `headers {object}` \n(key, value) object of headers (some headers like content-length are set by default)\n\n#### `cookies {object}` \n(key, value) object of cookies to encode and serve via the request header.\n\n#### `auth {{ username: string, password: string }} `\nAdds Basic authentication header with given username and password\n\n#### `dataType {string}` \nDetermines the request data type (json|form-url-encoded), this option will encode the request body according to the given dataType and will add the appropriate header (defaults to json). \n\nIf null will be given, the body will be served as string.\n\n#### `timeout {number} `\nSet a timeout (in milliseconds) for the request.\n\n#### `redirect {boolean} `\nDetermines if should continue with redirects \n\n\n#### `cache {{ cache: boolean, expires: number }}`\nRequistify has built-in Redis based caching mechanism. For using this feature, set the cache property to true using the following object:\n\n```javascript\nrequestify.get('http://examples.com/api/foo', {\n    cache: {\n    \tcache: true, // Will set caching to true for this request.\n    \texpires: 3600 // Time for cache to expire in milliseconds\n    }\n});\n```\n\nCaching will always be set to `false` by default.\n\n\n### requestify.request(url, options)\n\nExecutes a custom request according to options object\n\n``` javascript\nrequestify.request('https://example.com/api/foo', {\n\tmethod: 'POST',\n\tbody: {\n\t\tfoo: 'bar'\n\t\tbar: 'foo'\n\t},\n\theaders: {\n\t\t'X-Forwarded-By': 'me'\n\t},\n\tcookies: {\n\t\tmySession: 'some cookie value'\n\t},\n\tauth: {\n\t\tusername: 'foo',\n\t\tpassword: 'bar'\n\t},\n\tdataType: 'json'\t\t\n})\n.then(function(response) {\n\t// get the response body\n\tresponse.getBody();\n\n   \t// get the response headers\n \tresponse.getHeaders();\n\n \t// get specific response header\n \tresponse.getHeader('Accept');\n \n \t// get the code\n \tresponse.getCode();\n\t\n\t// get the raw response body\n\tresponse.body;\n});\n```\n### requestify.get(url, options)\n\nExecutes a GET method request\n``` javascript\nrequestify.get('http://example.com').then(function(response) {\n\t// Get the response body\n\tresponse.getBody();\n});\n```\n### requestify.post(url, data, options)\n\nExecutes a POST method request\n``` javascript\nrequestify.post('http://example.com', {\n\t\thello: 'world'\n})\n.then(function(response) {\n\t// Get the response body\n\tresponse.getBody();\n});\n```\n\n### requestify.put(url, data, options)\n\nExecutes a PUT method request\n\n``` javascript\nrequestify.put('http://example.com', 'some-file-content').then(function(response) {\n\t// Get the response body\n\tresponse.getBody();\n});\n```\n\n### requestify.delete(url, options)\n\nExecutes a DELETE method request\n\n``` javascript\nrequestify.delete('http://example.com').then(function(response) {\n\t// Get the response body\n\tresponse.getBody();\n});\n```\n\n### requestify.head(url, options)\n\nExecutes a HEAD method request\n\n``` javascript\nrequestify.head('http://example.com').then(function(response) {\n\t// Get the response code\n\tresponse.getCode();\n});\n```\n\n## Handling Errors\n\nWhile the `.then()` callback is used for handling succesful responses, the .`fail()` callback is used for handling errors.\n\n``` javascript\nrequestify.get('http://example.com')\n\t.then(function(response) {\n\t\tresponse.getCode(); // Some code between 200-299\n\t})\n\t.fail(function(response) {\n\t\tresponse.getCode(); // Some error code such as, for example, 404\n\t});\n```\n\n## Custom Cache Transporters\n\nUsing Requestify, you can implement your own cache transporters for using currently unsupported stores.\nTo implement your own store, all you have to do is implement Requestify's cache transporter interface. For example, you can see the core Redis transporter (./cache-transporters).\nBelow is the interface specs to implement:\n\n### get(url: string, callback: function)\n\nReturns the response according to the given URL from your cache store and call the given callback with the data.\n\n### set(url: string, response: {{ code: number, headers: object, body: string, created: timestamp }}, callback: function)\n\nStore the given response by the given URL (key), please make sure to store the response object exactly in the same way you've got it.\n\n### purge(url: string, callback: function)\n\nPurge the response according to the given URL (key) from your cache store.\n\n## Running Tests\n\nTo run the test suite first install the development dependencies:\n\n\t$ npm install\t\n\nThen run the tests:\n\n\t$ npm test\n\n## License\n\nThe MIT License (MIT)\n\nCopyright (c) 2013 Ran Mizrahi <<ran@cocycles.com>>\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in\nall copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN\nTHE SOFTWARE.\n\n",
-  "readmeFilename": "README.md",
+  "keywords": [
+    "jquery",
+    "javascript",
+    "browser",
+    "library"
+  ],
   "bugs": {
-    "url": "https://github.com/ranm8/requestify/issues"
+    "url": "https://github.com/jquery/jquery/issues"
   },
-  "_id": "requestify@0.2.5",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-preset-es2015": "6.6.0",
+    "commitplease": "2.6.1",
+    "core-js": "2.2.2",
+    "cross-spawn": "2.2.3",
+    "eslint-config-jquery": "1.0.0",
+    "grunt": "1.0.1",
+    "grunt-babel": "6.0.0",
+    "grunt-cli": "1.2.0",
+    "grunt-compare-size": "0.4.2",
+    "grunt-contrib-uglify": "1.0.1",
+    "grunt-contrib-watch": "1.0.0",
+    "grunt-eslint": "19.0.0",
+    "grunt-git-authors": "3.2.0",
+    "grunt-jsonlint": "1.0.7",
+    "grunt-newer": "1.2.0",
+    "grunt-npmcopy": "0.1.0",
+    "gzip-js": "0.3.2",
+    "husky": "0.11.4",
+    "insight": "0.8.1",
+    "jsdom": "5.6.1",
+    "load-grunt-tasks": "3.5.0",
+    "native-promise-only": "0.8.1",
+    "promises-aplus-tests": "2.1.2",
+    "q": "1.4.1",
+    "qunit-assert-step": "1.0.3",
+    "qunitjs": "1.23.1",
+    "requirejs": "2.2.0",
+    "sinon": "1.17.3",
+    "sizzle": "2.3.3",
+    "strip-json-comments": "2.0.1",
+    "testswarm": "1.1.0"
+  },
+  "scripts": {
+    "build": "npm install && grunt",
+    "start": "grunt watch",
+    "test": "grunt && grunt test:slow",
+    "precommit": "grunt lint:newer",
+    "commitmsg": "node node_modules/commitplease"
+  },
+  "commitplease": {
+    "nohook": true,
+    "components": [
+      "Docs",
+      "Tests",
+      "Build",
+      "Support",
+      "Release",
+      "Core",
+      "Ajax",
+      "Attributes",
+      "Callbacks",
+      "CSS",
+      "Data",
+      "Deferred",
+      "Deprecated",
+      "Dimensions",
+      "Effects",
+      "Event",
+      "Manipulation",
+      "Offset",
+      "Queue",
+      "Selector",
+      "Serialize",
+      "Traversing",
+      "Wrap"
+    ],
+    "markerPattern": "^((clos|fix|resolv)(e[sd]|ing))|(refs?)",
+    "ticketPattern": "^((Closes|Fixes) ([a-zA-Z]{2,}-)[0-9]+)|(Refs? [^#])"
+  },
+  "readme": "# jQuery\n\n> jQuery is a fast, small, and feature-rich JavaScript library.\n\nFor information on how to get started and how to use jQuery, please see [jQuery's documentation](http://api.jquery.com/).\nFor source files and issues, please visit the [jQuery repo](https://github.com/jquery/jquery).\n\n## Including jQuery\n\nBelow are some of the most common ways to include jQuery.\n\n### Browser\n\n#### Script tag\n\n```html\n<script src=\"https://code.jquery.com/jquery-2.2.0.min.js\"></script>\n```\n\n#### Babel\n\n[Babel](http://babeljs.io/) is a next generation JavaScript compiler. One of the features is the ability to use ES6/ES2015 modules now, even though browsers do not yet support this feature natively.\n\n```js\nimport $ from \"jquery\";\n```\n\n#### Browserify/Webpack\n\nThere are several ways to use [Browserify](http://browserify.org/) and [Webpack](https://webpack.github.io/). For more information on using these tools, please refer to the corresponding project's documention. In the script, including jQuery will usually look like this...\n\n```js\nvar $ = require(\"jquery\");\n```\n\n#### AMD (Asynchronous Module Definition)\n\nAMD is a module format built for the browser. For more information, we recommend [require.js' documentation](http://requirejs.org/docs/whyamd.html).\n\n```js\ndefine([\"jquery\"], function($) {\n\n});\n```\n\n### Node\n\nTo include jQuery in [Node](nodejs.org), first install with npm.\n\n```sh\nnpm install jquery\n```\n\nFor jQuery to work in Node, a window with a document is required. Since no such window exists natively in Node, one can be mocked by tools such as [jsdom](https://github.com/tmpvar/jsdom). This can be useful for testing purposes.\n\n```js\nrequire(\"jsdom\").env(\"\", function(err, window) {\n\tif (err) {\n\t\tconsole.error(err);\n\t\treturn;\n\t}\n\n\tvar $ = require(\"jquery\")(window);\n});\n```\n",
+  "readmeFilename": "README.md",
+  "_id": "jquery@3.1.1",
   "dist": {
-    "shasum": "d4ef6b2f90d76f62a374ba9d296bca19d07abfe3"
+    "shasum": "ac0a04a81c992919e3a7bf57cbdee73d0f029c1e"
   },
-  "_from": "requestify@",
-  "_resolved": "https://registry.npmjs.org/requestify/-/requestify-0.2.5.tgz"
+  "_from": "jquery@^3.1.0",
+  "_resolved": "https://registry.npmjs.org/jquery/-/jquery-3.1.1.tgz"
 }
