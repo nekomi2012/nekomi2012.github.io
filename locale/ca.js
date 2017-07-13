@@ -2,15 +2,9 @@
 //! locale : Catalan [ca]
 //! author : Juan G. Hurtado : https://github.com/juanghurtado
 
-;(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined'
-       && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
-   factory(global.moment)
-}(this, (function (moment) { 'use strict';
+import moment from '../moment';
 
-
-var ca = moment.defineLocale('ca', {
+export default moment.defineLocale('ca', {
     months : 'gener_febrer_març_abril_maig_juny_juliol_agost_setembre_octubre_novembre_desembre'.split('_'),
     monthsShort : 'gen._febr._mar._abr._mai._jun._jul._ag._set._oct._nov._des.'.split('_'),
     monthsParseExact : true,
@@ -76,6 +70,3 @@ var ca = moment.defineLocale('ca', {
     }
 });
 
-return ca;
-
-})));

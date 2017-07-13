@@ -4,15 +4,9 @@
 //! komento: Mi estas malcerta se mi korekte traktis akuzativojn en tiu traduko.
 //!          Se ne, bonvolu korekti kaj avizi min por ke mi povas lerni!
 
-;(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined'
-       && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
-   factory(global.moment)
-}(this, (function (moment) { 'use strict';
+import moment from '../moment';
 
-
-var eo = moment.defineLocale('eo', {
+export default moment.defineLocale('eo', {
     months : 'januaro_februaro_marto_aprilo_majo_junio_julio_aŭgusto_septembro_oktobro_novembro_decembro'.split('_'),
     monthsShort : 'jan_feb_mar_apr_maj_jun_jul_aŭg_sep_okt_nov_dec'.split('_'),
     weekdays : 'Dimanĉo_Lundo_Mardo_Merkredo_Ĵaŭdo_Vendredo_Sabato'.split('_'),
@@ -68,6 +62,3 @@ var eo = moment.defineLocale('eo', {
     }
 });
 
-return eo;
-
-})));

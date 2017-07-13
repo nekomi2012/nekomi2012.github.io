@@ -2,15 +2,9 @@
 //! locale : Portuguese (Brazil) [pt-br]
 //! author : Caio Ribeiro Pereira : https://github.com/caio-ribeiro-pereira
 
-;(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined'
-       && typeof require === 'function' ? factory(require('../moment')) :
-   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
-   factory(global.moment)
-}(this, (function (moment) { 'use strict';
+import moment from '../moment';
 
-
-var ptBr = moment.defineLocale('pt-br', {
+export default moment.defineLocale('pt-br', {
     months : 'Janeiro_Fevereiro_Março_Abril_Maio_Junho_Julho_Agosto_Setembro_Outubro_Novembro_Dezembro'.split('_'),
     monthsShort : 'Jan_Fev_Mar_Abr_Mai_Jun_Jul_Ago_Set_Out_Nov_Dez'.split('_'),
     weekdays : 'Domingo_Segunda-feira_Terça-feira_Quarta-feira_Quinta-feira_Sexta-feira_Sábado'.split('_'),
@@ -56,6 +50,3 @@ var ptBr = moment.defineLocale('pt-br', {
     ordinal : '%dº'
 });
 
-return ptBr;
-
-})));
