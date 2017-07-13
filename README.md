@@ -1,295 +1,589 @@
+# xpress 
 
-# Engine.IO client
 
-[![Build Status](https://travis-ci.org/socketio/engine.io-client.svg?branch=master)](http://travis-ci.org/socketio/engine.io-client)
-[![NPM version](https://badge.fury.io/js/engine.io-client.svg)](http://badge.fury.io/js/engine.io-client)
+## What is xpress?
 
-This is the client for [Engine.IO](http://github.com/socketio/engine.io),
-the implementation of transport-based cross-browser/cross-device
-bi-directional communication layer for [Socket.IO](http://github.com/socketio/socket.io).
+- **Api Framework** A node.js api framework base on express which provide api route version and channel control 
+- **Web Framework** A node.js web framework base on express and art-templete, and expand many usefull view helper
 
-## How to use
+## Install
 
-### Standalone
+   $ npm install -g xpress
+   
+## Sample code
+> there are two full sample projects in /sample/api and /sample/web
 
-You can find an `engine.io.js` file in this repository, which is a
-standalone build you can use as follows:
-
-```html
-<script src="/path/to/engine.io.js"></script>
-<script>
-  // eio = Socket
-  var socket = eio('ws://localhost');
-  socket.on('open', function(){
-    socket.on('message', function(data){});
-    socket.on('close', function(){});
-  });
-</script>
+### Run sample project
 ```
-
-### With browserify
-
-Engine.IO is a commonjs module, which means you can include it by using
-`require` on the browser and package using [browserify](http://browserify.org/):
-
-1. install the client package
-
-    ```bash
-    $ npm install engine.io-client
-    ```
-
-1. write your app code
-
-    ```js
-    var socket = require('engine.io-client')('ws://localhost');
-    socket.on('open', function(){
-      socket.on('message', function(data){});
-      socket.on('close', function(){});
-    });
-    ```
-
-1. build your app bundle
-
-    ```bash
-    $ browserify app.js > bundle.js
-    ```
-
-1. include on your page
-
-    ```html
-    <script src="/path/to/bundle.js"></script>
-    ```
-
-### Sending and receiving binary
-
-```html
-<script src="/path/to/engine.io.js"></script>
-<script>
-  var socket = new eio.Socket('ws://localhost/');
-  socket.binaryType = 'blob';
-  socket.on('open', function () {
-    socket.send(new Int8Array(5));
-    socket.on('message', function(blob){});
-    socket.on('close', function(){ });
-  });
-</script>
+#cd ./sample/api
+cd ./sample/web 
+npm install 
+node app.js
 ```
-
-### Node.JS
-
-Add `engine.io-client` to your `package.json` and then:
-
-```js
-var socket = require('engine.io-client')('ws://localhost');
-socket.on('open', function(){
-  socket.on('message', function(data){});
-  socket.on('close', function(){});
-});
+    
+> open http://127.0.0.1:8001/, there are many template engine(base on artTemplate) view helper sample code
+    
+## Create project with commander
 ```
-
-### Node.js with certificates
-```js
-var opts = {
-  key: fs.readFileSync('test/fixtures/client.key'),
-  cert: fs.readFileSync('test/fixtures/client.crt'),
-  ca: fs.readFileSync('test/fixtures/ca.crt')
-};
-
-var socket = require('engine.io-client')('ws://localhost', opts);
-socket.on('open', function(){
-  socket.on('message', function(data){});
-  socket.on('close', function(){});
-});
-```
-
-### Node.js with extraHeaders
-```js
-var opts = {
-  extraHeaders: {
-    'X-Custom-Header-For-My-Project': 'my-secret-access-token',
-    'Cookie': 'user_session=NI2JlCKF90aE0sJZD9ZzujtdsUqNYSBYxzlTsvdSUe35ZzdtVRGqYFr0kdGxbfc5gUOkR9RGp20GVKza; path=/; expires=Tue, 07-Apr-2015 18:18:08 GMT; secure; HttpOnly'
-  }
-};
-
-var socket = require('engine.io-client')('ws://localhost', opts);
-socket.on('open', function(){
-  socket.on('message', function(data){});
-  socket.on('close', function(){});
-});
-```
-
-## Features
-
-- Lightweight
-- Runs on browser and node.js seamlessly
-- Transports are independent of `Engine`
-  - Easy to debug
-  - Easy to unit test
-- Runs inside HTML5 WebWorker
-- Can send and receive binary data
-  - Receives as ArrayBuffer or Blob when in browser, and Buffer or ArrayBuffer
-    in Node
-  - When XHR2 or WebSockets are used, binary is emitted directly. Otherwise
-    binary is encoded into base64 strings, and decoded when binary types are
-    supported.
-  - With browsers that don't support ArrayBuffer, an object { base64: true,
-    data: dataAsBase64String } is emitted on the `message` event.
-
-## API
-
-### Socket
-
-The client class. Mixes in [Emitter](http://github.com/component/emitter).
-Exposed as `eio` in the browser standalone build.
-
-#### Properties
-
-- `protocol` _(Number)_: protocol revision number
-- `binaryType` _(String)_ : can be set to 'arraybuffer' or 'blob' in browsers,
-  and `buffer` or `arraybuffer` in Node. Blob is only used in browser if it's
-  supported.
-
-#### Events
-
-- `open`
-  - Fired upon successful connection.
-- `message`
-  - Fired when data is received from the server.
-  - **Arguments**
-    - `String` | `ArrayBuffer`: utf-8 encoded data or ArrayBuffer containing
-      binary data
-- `close`
-  - Fired upon disconnection. In compliance with the WebSocket API spec, this event may be
-    fired even if the `open` event does not occur (i.e. due to connection error or `close()`).
-- `error`
-  - Fired when an error occurs.
-- `flush`
-  - Fired upon completing a buffer flush
-- `drain`
-  - Fired after `drain` event of transport if writeBuffer is empty
-- `upgradeError`
-  - Fired if an error occurs with a transport we're trying to upgrade to.
-- `upgrade`
-  - Fired upon upgrade success, after the new transport is set
-- `ping`
-  - Fired upon _flushing_ a ping packet (ie: actual packet write out)
-- `pong`
-  - Fired upon receiving a pong packet.
-
-#### Methods
-
-- **constructor**
-    - Initializes the client
-    - **Parameters**
-      - `String` uri
-      - `Object`: optional, options object
-    - **Options**
-      - `agent` (`http.Agent`): `http.Agent` to use, defaults to `false` (NodeJS only)
-      - `upgrade` (`Boolean`): defaults to true, whether the client should try
-      to upgrade the transport from long-polling to something better.
-      - `forceJSONP` (`Boolean`): forces JSONP for polling transport.
-      - `jsonp` (`Boolean`): determines whether to use JSONP when
-        necessary for polling. If disabled (by settings to false) an error will
-        be emitted (saying "No transports available") if no other transports
-        are available. If another transport is available for opening a
-        connection (e.g. WebSocket) that transport
-        will be used instead.
-      - `forceBase64` (`Boolean`): forces base 64 encoding for polling transport even when XHR2 responseType is available and WebSocket even if the used standard supports binary.
-      - `enablesXDR` (`Boolean`): enables XDomainRequest for IE8 to avoid loading bar flashing with click sound. default to `false` because XDomainRequest has a flaw of not sending cookie.
-      - `timestampRequests` (`Boolean`): whether to add the timestamp with each
-        transport request. Note: polling requests are always stamped unless this
-        option is explicitly set to `false` (`false`)
-      - `timestampParam` (`String`): timestamp parameter (`t`)
-      - `policyPort` (`Number`): port the policy server listens on (`843`)
-      - `path` (`String`): path to connect to, default is `/engine.io`
-      - `transports` (`Array`): a list of transports to try (in order).
-      Defaults to `['polling', 'websocket']`. `Engine`
-      always attempts to connect directly with the first one, provided the
-      feature detection test for it passes.
-      - `rememberUpgrade` (`Boolean`): defaults to false.
-        If true and if the previous websocket connection to the server succeeded,
-        the connection attempt will bypass the normal upgrade process and will initially
-        try websocket. A connection attempt following a transport error will use the
-        normal upgrade process. It is recommended you turn this on only when using
-        SSL/TLS connections, or if you know that your network does not block websockets.
-      - `pfx` (`String`): Certificate, Private key and CA certificates to use for SSL. Can be used in Node.js client environment to manually specify certificate information.
-      - `key` (`String`): Private key to use for SSL. Can be used in Node.js client environment to manually specify certificate information.
-      - `passphrase` (`String`): A string of passphrase for the private key or pfx. Can be used in Node.js client environment to manually specify certificate information.
-      - `cert` (`String`): Public x509 certificate to use. Can be used in Node.js client environment to manually specify certificate information.
-      - `ca` (`String`|`Array`): An authority certificate or array of authority certificates to check the remote host against.. Can be used in Node.js client environment to manually specify certificate information.
-      - `ciphers` (`String`): A string describing the ciphers to use or exclude. Consult the [cipher format list](http://www.openssl.org/docs/apps/ciphers.html#CIPHER_LIST_FORMAT) for details on the format. Can be used in Node.js client environment to manually specify certificate information.
-      - `rejectUnauthorized` (`Boolean`): If true, the server certificate is verified against the list of supplied CAs. An 'error' event is emitted if verification fails. Verification happens at the connection level, before the HTTP request is sent. Can be used in Node.js client environment to manually specify certificate information.
-      - `perMessageDeflate` (`Object|Boolean`): parameters of the WebSocket permessage-deflate extension
-        (see [ws module](https://github.com/einaros/ws) api docs). Set to `false` to disable. (`true`)
-        - `threshold` (`Number`): data is compressed only if the byte size is above this value. This option is ignored on the browser. (`1024`)
-      - `extraHeaders` (`Object`): Headers that will be passed for each request to the server (via xhr-polling and via websockets). These values then can be used during handshake or for special proxies. Can only be used in Node.js client environment.
-      - `onlyBinaryUpgrades` (`Boolean`): whether transport upgrades should be restricted to transports supporting binary data (`false`)
-      - `requestTimeout` (`Number`): Timeout for xhr-polling requests in milliseconds (`0`)
-      - `forceNode` (`Boolean`): Uses NodeJS implementation for websockets - even if there is a native Browser-Websocket available, which is preferred by default over the NodeJS implementation. (This is useful when using hybrid platforms like nw.js or electron) (`false`, NodeJS only)
-      - `localAddress` (`String`): the local IP address to connect to
-- `send`
-    - Sends a message to the server
-    - **Parameters**
-      - `String` | `ArrayBuffer` | `ArrayBufferView` | `Blob`: data to send
-      - `Object`: optional, options object
-      - `Function`: optional, callback upon `drain`
-    - **Options**
-      - `compress` (`Boolean`): whether to compress sending data. This option is ignored and forced to be `true` on the browser. (`true`)
-- `close`
-    - Disconnects the client.
-
-### Transport
-
-The transport class. Private. _Inherits from EventEmitter_.
-
-#### Events
-
-- `poll`: emitted by polling transports upon starting a new request
-- `pollComplete`: emitted by polling transports upon completing a request
-- `drain`: emitted by polling transports upon a buffer drain
-
-## Tests
-
-`engine.io-client` is used to test
-[engine](http://github.com/socketio/engine.io). Running the `engine.io`
-test suite ensures the client works and vice-versa.
-
-Browser tests are run using [zuul](https://github.com/defunctzombie/zuul). You can
-run the tests locally using the following command.
-
-```
-./node_modules/.bin/zuul --local 8080 -- test/index.js
-```
-
-Additionally, `engine.io-client` has a standalone test suite you can run
-with `make test` which will run node.js and browser tests. You must have zuul setup with
-a saucelabs account.
-
-## Support
-
-The support channels for `engine.io-client` are the same as `socket.io`:
-  - irc.freenode.net **#socket.io**
-  - [Google Groups](http://groups.google.com/group/socket_io)
-  - [Website](http://socket.io)
-
-## Development
-
-To contribute patches, run tests or benchmarks, make sure to clone the
-repository:
-
-```bash
-git clone git://github.com/socketio/engine.io-client.git
-```
-
-Then:
-
-```bash
-cd engine.io-client
+npm install -g xpress
+cd /<project path>
+xpress -p ./ -t (api | web)
 npm install
+npm start
+
+```    
+
+## APi    
+### create an api server with xpress
+```js
+//import module
+var Xpress = require('Xpress');
+var config = require('./config');
 ```
 
-See the `Tests` section above for how to run tests before submitting any patches.
+```js
+//create server
+var server = new Xpress({
+    host: null,
+    key: null,
+    cert: null,
+    trace: true, //open route trace
+    port: {
+        http: 8001,
+        https: null
+    }
+});
+```
 
-## License
+```js
+//configure
+server.conf('x-powered-by', false);
+server.conf('trust proxy', true);
+server.conf('views', config.public.server.view.path);
+server.conf('view engine',config.public.server.view.engine);
+server.conf('view cache', false);
+server.engine('html', Xpress.engine.__express); 
+```
+> Xpress.engine is equal require('art-template/node/template-native.js')
 
-MIT - Copyright (c) 2014 Automattic, Inc.
+```js
+//use middleware
+var body = require('body-parser');
+var cookie = require('cookie-parser');
+var timeout = require('connect-timeout');
+var compression = require("compression");
+var statics = require('express-static');
+server.use(compression());
+server.use(timeout('20s'));
+server.use(cookie());
+server.use(body.json());
+server.use(body.urlencoded({extended: true}));
+server.use(statics(config.public.server.statics.path));
+```
+
+```js
+//register an api on a controller with version or channel control
+//'v' represent version and 'c' represent channel
+//if you register an api with version and channel control, 
+//you must set 'X-Accept-Version' and 'X-Client-Channel' on request header, 
+//xpress will get the two value from the header and compared with the register v and c
+//if not equal, xpress will skip the controller and jump to the next controller which has registered the same route
+//you can get and set the two headers on Xpress.defaults.versionHeader and Xpress.defaults.channelHeader
+server.get('/user', {v:1.0, c: 'ios'}, function(req, res, next){
+    res.json({
+        users: []
+    });
+});
+//register an api on a controller without version and channel control
+server.get('/user/:id', function(req, res, next){
+    res.json({
+        name: 'synder',
+        age : 29
+    });
+})
+```
+```js
+//create a sub router and register on server
+var Router = Xpress.Router;
+var productRouter = new Router();
+//register an api on subRouter without version or channel control  
+//import utils 
+var string = Xpress.string;
+var parser = Xpress.parser;
+var validate = Xpress.validate;
+productRouter.get('/', function(req, res, next){
+    if(validate.isPassword(req.query.pass)){
+		res.json({
+			bankCard: string.bankCard('6666666666666666')    
+		});
+	}
+})
+//register an api on subRouter with version or channel control  
+productRouter.get('/:id', {v:1, c:1}, function(req, res, next){
+    var id = parser.parseInt(req.params.id, 10);
+    res.json({
+        id: id
+    });
+})
+server.sub('/product', productRouter); 
+```
+```js
+//error handler
+server.error(404, function (err, req, res, next) {
+    res.status(404).json('not found');
+});
+server.error(500, function (err, req, res, next) {
+    res.status(500).json(err.stack);
+});
+```
+```js
+//listen on host and port
+server.listen(function(message){
+    console.log(message);
+});
+//listen on host and port with cluster
+//server.cluster(0, function(msg){
+//    console.log(msg);
+//});
+```
+```js
+//export
+module.exports = server;
+```
+##Integration tools
+### parser
+```javascript
+var parser = require('xpress').parser;
+parser.parseTime('2016-06-22T04:42:07.228Z');
+parser.parseDate('2016-06-22T04:42:07.228Z');
+parser.parseDateTime('2016-06-22T04:42:07.228Z');
+parser.parseInt('122', 100); //122
+parser.parseInt('a122', 100); //100
+parser.parseFloat('a122', 100); //100
+parser.parseBool('a122'); //true
+parser.parseBool('');     //false
+parser.parseJson('{"name":"synder"}', null);     //{name:"synder"}
+parser.parseJson('{"name":"synder}', null);     //null
+```
+
+### fs
+```javascript
+var fs = require('xpress').fs;
+//get dir
+fs.homedir(); //return user home dir
+fs.tmpdir();  //return system temp dir
+//get file name or dir
+fs.filename(path);  //return file name 
+fs.filedir(path);   //return dir name
+//node navtive fs method
+fs.createReadStream();
+fs.createWriteStream();
+fs.chmod();
+fs.chown();
+fs.link();
+fs.unlink();
+fs.utimes();
+fs.stat();
+fs.access();
+fs.watch();
+//fs extend method
+fs.exists(path, callback);
+fs.mkdir(path, [opt], callback);
+fs.list(path, iterator, callback); //list file or dir in path
+fs.walk(path, iterator, callback); //list all file in path and child path
+fs.read(path, callback);
+fs.readline(path, iterator, callback); //read file by line
+fs.save(path, content, [opt], callback);
+fs.append(path, content, [opt], callback);
+fs.touch(path, [opt], callback);
+fs.copy(src, dst, callback);  //copy file or dir
+fs.move(src, dst, callback);  //cur file or dir
+fs.rename(old, newName, callback);
+fs.md5(filepath, callback);
+fs.fetch(webUrl, dst, [filename], callback); //get file from web
+```
+
+### validate
+```javascript
+var validate = require('xpress').validate;
+validate.isNull(str)
+validate.isUndefined(str)
+validate.isNullOrUndefined(str)
+validate.isDate(val)
+validate.isArray(val)
+validate.isString(val)
+validate.isNumber(num)
+validate.isFunction(val)
+validate.isNaN(val)
+validate.isRegExp(val)
+validate.isBool(val)
+validate.isInt(num)
+validate.isFloat(num)
+validate.isObject(obj)
+validate.isDictionary(obj)
+validate.isBuffer(obj)
+validate.isSymbol(str)
+validate.isRequired(str)
+validate.isMobile(str)
+validate.isEmail(str)
+validate.isPassword(str)
+validate.isChinese(str)
+validate.isBankCard(str)
+validate.isChineseIdCard(str)
+validate.isIPV4Address(str)
+```
+
+### string
+```javascript
+var string = require('xpress').string;
+string.date(new Date(), '-')              //2016-04-20
+string.time(new Date(), ':')              //10:03:20
+string.dateTime(new Date(), '-', ':')     //2016-04-20 10:03:20
+string.format('%s name is', 'synder')     //synder name is
+string.pad('12222', 10, '0', 'left')      //'0000012222'
+string.pad('12222', 10, '0', 'right')     //'1222200000'
+string.pad('12222', 10, '0', 'both')      //'0001222200'
+string.unit(10, 'px')                     //10px
+string.mask('18083489462', '*', 4, 5)         //180*****442
+string.join('', null, 10, undefined, 20, '+') //10 + 20
+string.trim('  name  ')        //name
+string.quote("name", '"')      //"name"
+string.clean('my   name  is')  //my name is
+string.lines('my\rname\ris')   //['my', 'name', 'is']
+string.signed(10)    //+10
+string.signed(-10)   //-10
+string.stringify()
+string.truncate('122212313213132132', 13, '...') //1222123132...
+string.capitalize()
+string.upperCase()
+string.lowerCase()
+string.currency(242605401.001, '$', 3)     //$242,605,401.001
+string.chineseCurrency('90002600401.001')  //玖佰亿零贰佰陆拾萬零肆佰零壹
+string.thousands(242605401.001)         //242,605,401.001
+string.bankCard('233546454633344332')   //2335 4645 4633 3443 32
+string.percentage(0.5)                  //50%
+string.percentage(0.5, 2)               //50.00%
+string.number(0.5, 3)                   //0.500
+```
+
+## View helper(base on [art-template](https://www.npmjs.com/package/art-template))
+<table cellspacing="0" cellpadding="0">
+    <tr>
+        <td>&lt;%= $dateTime(new Date())%&gt;</td>
+        <td>2016年06月07日 11时56分38秒</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $dateTime(Date.now())%&gt;</td>
+        <td>2016年06月07日 11时56分38秒</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $Math.random()%&gt;</td>
+        <td>0.035149546630335315</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $toString([1,2,3])%&gt;</td>
+        <td>[1,2,3]</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $parseInt('10', 0)%&gt;</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $parseInt('NA0122', 0)%&gt;</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $parseInt('NA0122')%&gt;</td>
+        <td>null</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $parseFloat('12.3')%&gt;</td>
+        <td>12.3</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $parseFloat('a12.3', 0)%&gt;</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $format('%s %X', 'sam', 1000)%&gt;</td>
+        <td>sam 0x3E8</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $format('%s %o', 'sam', 1000)%&gt;</td>
+        <td>sam 01750</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $format('%s %d', 'sam', 1000)%&gt;</td>
+        <td>sam 1000</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $format('%s %b', 'sam', 1000)%&gt;</td>
+        <td>sam 1111101000</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $format('%c %c', 'sam', 98)%&gt;</td>
+        <td>sam b</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $format('%s %2f', 'sam', 98)%&gt;</td>
+        <td>sam 98.00</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $format('%s %j', 'sam', {name:1})%&gt;</td>
+        <td>sam {"name":1}</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $toString(null)%&gt;</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>&lt;%= $toString({name: 1})%&gt;</td>
+        <td>{"name":1}</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $toString([12,3])%&gt;</td>
+        <td>[12,3]</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $join('10', '2', '6', '+')%&gt;</td>
+        <td>10+2+6</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $join('10', null, '6', '9', '+')%&gt;</td>
+        <td>10+6+9</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $join(null, null, '6', '+')%&gt;</td>
+        <td>6</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $join(null, '6', '', '+')%&gt;</td>
+        <td>6</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $trim('  name  ')%&gt;</td>
+        <td>name</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $mask('18083489462', '*', 4, 5)%&gt;</td>
+        <td>180*****462</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $mask('18083489462', '*', -1, 5)%&gt;</td>
+        <td>18083******</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $pad('12222', 10, '0', 'left')%&gt;</td>
+        <td>0000012222</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $pad('12222', 10, '0', 'right')%&gt;</td>
+        <td>1222200000</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $clean(' 122 22 ')%&gt;</td>
+        <td>122 22</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $toString($lines('122\r\n22132'))%&gt;</td>
+        <td>[122,22132]</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $toString($lines('122\r22132'))%&gt;</td>
+        <td>[122,22132]</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $truncate('122212313213132132', 13, '...')%&gt;</td>
+        <td>1222123132...</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $chineseCurrency('92102600401.001')%&gt;</td>
+        <td>玖佰贰拾壹亿零贰佰陆拾萬零肆佰零壹</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $currency(242605401.001, '$', 2)%&gt;</td>
+        <td>$242,605,401.00</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $upperCase('AbddessSww')%&gt;</td>
+        <td>ABDDESSSWW</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $lowerCase('AbddessSww')%&gt;</td>
+        <td>abddesssww</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $capitalize('AbddessSww')%&gt;</td>
+        <td>AbddessSww</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $capitalize('AbddessSww', true)%&gt;</td>
+        <td>Abddesssww</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $bankCard('233546454633344332')%&gt;</td>
+        <td>2335 4645 4633 3443 32</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $number(0.5, 3)%&gt;</td>
+        <td>0.500</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $thousands(2783619263)%&gt;</td>
+        <td>2,783,619,263</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $percentage(0.5)%&gt;</td>
+        <td>50%</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $percentage(0.523366, 2)%&gt;</td>
+        <td>52.34%</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $urlPathVersion('/name', 10)%&gt;</td>
+        <td>/name?version=10</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $urlPathJoin('/name', '//age')%&gt;</td>
+        <td>/name/age</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $urlFormat('/home', {name:1}, 'http', '127.0.0.1')%&gt;</td>
+        <td>http://127.0.0.1/home?name=1</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $urlFormat('/home', {name:1})%&gt;</td>
+        <td>/home?name=1</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $encodeURIComponent('/测试 账号')%&gt;</td>
+        <td>%2F%E6%B5%8B%E8%AF%95%20%E8%B4%A6%E5%8F%B7</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $decodeURIComponent($encodeURIComponent('/测试 账号'))%&gt;</td>
+        <td>/测试 账号</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $encodeURI('/测试 账号')%&gt;</td>
+        <td>/%E6%B5%8B%E8%AF%95%20%E8%B4%A6%E5%8F%B7</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $decodeURI($encodeURI('/测试 账号'))%&gt;</td>
+        <td>/测试 账号</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $date('2016-06-01T07:05:36.838Z', '-')%&gt;</td>
+        <td>2016-06-01</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $time('2016-06-01T07:05:36.838Z', ':')%&gt;</td>
+        <td>15:05:37</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $dateTime('2016-06-01T07:05:36.838Z', '-', ':')%&gt;</td>
+        <td>2016-06-01 15:05:37</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $dateTime('2016-06-01T07:05:36.838Z')%&gt;</td>
+        <td>2016年06月01日 15时05分37秒</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isNull(null)%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isNull(undefined)%&gt;</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isUndefined(undefined)%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isUndefined(null)%&gt;</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isNullOrUndefined(null)%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isNullOrUndefined(undefined)%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isArray([])%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isDate(new Date())%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isDate('2012-03-01')%&gt;</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isString('name')%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isString({})%&gt;</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isString(null)%&gt;</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isNumber(1)%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isBool(true)%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isInt(1.1)%&gt;</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isInt(1)%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isFloat(1.1)%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isFloat(1)%&gt;</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isObject(null)%&gt;</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isObject({})%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isObject([])%&gt;</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isDictionary([])%&gt;</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>&lt;%= $isDictionary({})%&gt;</td>
+        <td>true</td>
+    </tr>
+</table>
+
+## art-template
+> refer to [art-template](https://www.npmjs.com/package/art-template)
+
+## express
+> refer to [express.js](http://www.expressjs.com)
