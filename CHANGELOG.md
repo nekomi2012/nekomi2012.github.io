@@ -1,737 +1,223 @@
-Changelog
-=========
+# v2.1.3
+- Make bundle size smaller
+- Create optimized hotpath for `filter` in array case.
 
-### 2.17.1 [Also available here](https://gist.github.com/ichernev/f38280b2b29c4932914a6d3a4e50bfb2)
-* Release Dec 03, 2016
+# v2.1.2
+- Fixed a stackoverflow bug with `detect`, `some`, `every` on large inputs (#1293).
 
-* [#3638](https://github.com/moment/moment/pull/3638) [misc] TS: Make typescript definitions work with 1.x
-* [#3628](https://github.com/moment/moment/pull/3628) [misc] Adds "sign CLA" link to `CONTRIBUTING.md`
-* [#3640](https://github.com/moment/moment/pull/3640) [misc] Fix locale issues
+# v2.1.0
 
-### 2.17.0 [Also available here](https://gist.github.com/ichernev/ed58f76fb95205eeac653d719972b90c)
-* Release Nov 22, 2016
+- `retry` and `retryable` now support an optional `errorFilter` function that determines if the `task` should retry on the error (#1256, #1261)
+- Optimized array iteration in `race`, `cargo`, `queue`, and `priorityQueue` (#1253)
+- Added alias documentation to doc site (#1251, #1254)
+- Added [BootStrap scrollspy](http://getbootstrap.com/javascript/#scrollspy) to docs to highlight in the sidebar the current method being viewed  (#1289, #1300)
+- Various minor doc fixes (#1263, #1264, #1271, #1278, #1280, #1282, #1302)
 
-* [#3435](https://github.com/moment/moment/pull/3435) [new locale] yo: Yoruba (Nigeria) locale
-* [#3595](https://github.com/moment/moment/pull/3595) [bugfix] Fix accidental reference to global "value" variable
-* [#3506](https://github.com/moment/moment/pull/3506) [bugfix] Fix invalid moments returning valid dates to method calls
-* [#3563](https://github.com/moment/moment/pull/3563) [locale] ca: Change future relative time
-* [#3504](https://github.com/moment/moment/pull/3504) [tests] Fixes [#3463](https://github.com/moment/moment/issues/3463), parseZone not handling Z correctly (tests only)
-* [#3591](https://github.com/moment/moment/pull/3591) [misc] typescript: update typescript to 2.0.8, add strictNullChecks=true
-* [#3597](https://github.com/moment/moment/pull/3597) [misc] Fixed capitalization in nuget spec
+# v2.0.1
 
-### 2.16.0 [See full changelog](https://gist.github.com/ichernev/17bffc1005a032cb1a8ac4c1558b4994)
-* Release Nov 9, 2016
+- Significantly optimized all iteration based collection methods such as `each`, `map`, `filter`, etc (#1245, #1246, #1247).
 
-## Features
-* [#3530](https://github.com/moment/moment/pull/3530) [feature] Check whether input is date before checking if format is array
-* [#3515](https://github.com/moment/moment/pull/3515) [feature] Fix [#2300](https://github.com/moment/moment/issues/2300): Default to current week.
+# v2.0.0
 
-## Bugfixes
-* [#3546](https://github.com/moment/moment/pull/3546) [bugfix] Implement lazy-loading of child locales with missing prents
-* [#3523](https://github.com/moment/moment/pull/3523) [bugfix] parseZone should handle UTC
-* [#3502](https://github.com/moment/moment/pull/3502) [bugfix] Fix [#3500](https://github.com/moment/moment/issues/3500): ISO 8601 parsing should match the full string, not the beginning of the string.
-* [#3581](https://github.com/moment/moment/pull/3581) [bugfix] Fix parseZone, redo [#3504](https://github.com/moment/moment/issues/3504), fix [#3463](https://github.com/moment/moment/issues/3463)
+Lots of changes here!
 
-## New Locales
-* [#3416](https://github.com/moment/moment/pull/3416) [new locale] nl-be: Dutch (Belgium) locale
-* [#3393](https://github.com/moment/moment/pull/3393) [new locale] ar-dz: Arabic (Algeria) locale
-* [#3342](https://github.com/moment/moment/pull/3342) [new locale] tet: Tetun Dili (East Timor) locale
+First and foremost, we have a slick new [site for docs](https://caolan.github.io/async/). Special thanks to [**@hargasinski**](https://github.com/hargasinski) for his work converting our old docs to `jsdoc` format and implementing the new website. Also huge ups to [**@ivanseidel**](https://github.com/ivanseidel) for designing our new logo. It was a long process for both of these tasks, but I think these changes turned out extraordinary well.
 
-And more locale, build and typescript improvements
+The biggest feature is modularization. You can now `require("async/series")` to only require the `series` function. Every Async library function is available this way. You still can `require("async")` to require the entire library, like you could do before.
 
-### 2.15.2
-* Release Oct 23, 2016
-* [#3525](https://github.com/moment/moment/pull/3525) Speedup month standalone/format regexes **(IMPORTANT)**
-* [#3466](https://github.com/moment/moment/pull/3466) Fix typo of Javanese
+We also provide Async as a collection of ES2015 modules. You can now `import {each} from 'async-es'` or `import waterfall from 'async-es/waterfall'`. If you are using only a few Async functions, and are using a ES bundler such as Rollup, this can significantly lower your build size.
 
-### 2.15.1
-* Release Sept 20, 2016
-* [#3438](https://github.com/moment/moment/pull/3438) Fix locale autoload, revert [#3344](https://github.com/moment/moment/pull/3344)
+Major thanks to [**@Kikobeats**](github.com/Kikobeats), [**@aearly**](github.com/aearly) and [**@megawac**](github.com/megawac) for doing the majority of the modularization work, as well as [**@jdalton**](github.com/jdalton) and [**@Rich-Harris**](github.com/Rich-Harris) for advisory work on the general modularization strategy.
 
-### 2.15.0 [See full changelog](https://gist.github.com/ichernev/10e1c5bf647545c72ca30e9628a09ed3)
-- Release Sept 12, 2016
+Another one of the general themes of the 2.0 release is standardization of what an "async" function is. We are now more strictly following the node-style continuation passing style. That is, an async function is a function that:
 
-## New Locales
-* [#3255](https://github.com/moment/moment/pull/3255) [new locale] mi: Maori language
-* [#3267](https://github.com/moment/moment/pull/3267) [new locale] ar-ly: Arabic (Libya) locale
-* [#3333](https://github.com/moment/moment/pull/3333) [new locale] zh-hk: Chinese (Hong Kong) locale
+1. Takes a variable number of arguments
+2. The last argument is always a callback
+3. The callback can accept any number of arguments
+4. The first argument passed to the callback will be treated as an error result, if the argument is truthy
+5. Any number of result arguments can be passed after the "error" argument
+6. The callback is called once and exactly once, either on the same tick or later tick of the JavaScript event loop.
 
-## Bugfixes
-* [#3276](https://github.com/moment/moment/pull/3276) [bugfix] duration: parser: Support ms durations in .NET syntax
-* [#3312](https://github.com/moment/moment/pull/3312) [bugfix] locales: Enable locale-data getters without moment (fixes [#3284](https://github.com/moment/moment/issues/3284))
-* [#3381](https://github.com/moment/moment/pull/3381) [bugfix] parsing: Fix parseZone without timezone in string, fixes [#3083](https://github.com/moment/moment/issues/3083)
-* [#3383](https://github.com/moment/moment/pull/3383) [bugfix] toJSON: Fix isValid so that toJSON works after a moment is frozen
-* [#3427](https://github.com/moment/moment/pull/3427) [bugfix] ie8: Fix IE8 (regression in 2.14.x)
+There were several cases where Async accepted some functions that did not strictly have these properties, most notably `auto`, `every`, `some`, and `filter`.
 
-## Packaging
-* [#3299](https://github.com/moment/moment/pull/3299) [pkg] npm: Do not include .npmignore in npm package
-* [#3273](https://github.com/moment/moment/pull/3273) [pkg] jspm: Include moment.d.ts file in package
-* [#3344](https://github.com/moment/moment/pull/3344) [pkg] exports: use module.require for nodejs
+Another theme is performance. We have eliminated internal deferrals in all cases where they make sense. For example, in `waterfall` and `auto`, there was a `setImmediate` between each task -- these deferrals have been removed. A `setImmediate` call can add up to 1ms of delay. This might not seem like a lot, but it can add up if you are using many Async functions in the course of processing a HTTP request, for example. Nearly all asynchronous functions that do I/O already have some sort of deferral built in, so the extra deferral is unnecessary. The trade-off of this change is removing our built-in stack-overflow defense. Many synchronous callback calls in series can quickly overflow the JS call stack. If you do have a function that is sometimes synchronous (calling its callback on the same tick), and are running into stack overflows, wrap it with `async.ensureAsync()`.
 
-Also some locale and typescript improvements
-
-### 2.14.1
-- Release July 20, 2016
-* [#3280](https://github.com/moment/moment/pull/3280) Fix typescript definitions
-
-
-### 2.14.0 [See full changelog](https://gist.github.com/ichernev/812e79ac36a7829a22598fe964bfc18a)
-
-- Release July 20, 2016
+Another big performance win has been re-implementing `queue`, `cargo`, and `priorityQueue` with [doubly linked lists](https://en.wikipedia.org/wiki/Doubly_linked_list) instead of arrays. This has lead to queues being an order of [magnitude faster on large sets of tasks](https://github.com/caolan/async/pull/1205).
 
 ## New Features
-* [#3233](http://github.com/moment/moment/pull/3233) Introduce month.isFormat for format/standalone discovery
-* [#2848](http://github.com/moment/moment/pull/2848) Allow user to get/set the rounding method used when calculating relative time
-* [#3112](http://github.com/moment/moment/pull/3112) optimize configFromStringAndFormat
-* [#3147](http://github.com/moment/moment/pull/3147) Call calendar format function with moment context
-* [#3160](http://github.com/moment/moment/pull/3160) deprecate isDSTShifted
-* [#3175](http://github.com/moment/moment/pull/3175) make moment calendar extensible with ad-hoc options
-* [#3191](http://github.com/moment/moment/pull/3191) toDate returns a copy of the internal date object
-* [#3192](http://github.com/moment/moment/pull/3192) Adding support for rollup import.
-* [#3238](http://github.com/moment/moment/pull/3238) Handle empty object and empty array for creation as now
-* [#3082](http://github.com/moment/moment/pull/3082) Use relative AMD moment dependency
-
-## Bugfixes
-* [#3241](http://github.com/moment/moment/pull/3241) Escape all 24 mixed pieces, not only first 12 in computeMonthsParse
-* [#3008](http://github.com/moment/moment/pull/3008) Object setter orders sets based on size of unit
-* [#3177](http://github.com/moment/moment/pull/3177) Bug Fix [#2704](http://github.com/moment/moment/pull/2704) - isoWeekday(String) inconsistent with isoWeekday(Number)
-* [#3230](http://github.com/moment/moment/pull/3230) fix passing date with format string to ignore format string
-* [#3232](http://github.com/moment/moment/pull/3232) Fix negative 0 in certain diff cases
-* [#3235](http://github.com/moment/moment/pull/3235) Use proper locale inheritance for the base locale, fixes [#3137](http://github.com/moment/moment/pull/3137)
-
-Plus es-do locale and locale bugfixes
-
-### 2.13.0 [See full changelog](https://gist.github.com/ichernev/0132fcf5b61f7fc140b0bb0090480d49)
-- Release April 18, 2016
-## Enhancements:
-* [#2982](https://github.com/moment/moment/pull/2982) Add 'date' as alias to 'day' for startOf() and endOf().
-* [#2955](https://github.com/moment/moment/pull/2955) Add parsing negative components in durations when ISO 8601
-* [#2991](https://github.com/moment/moment/pull/2991) isBetween support for both open and closed intervals
-* [#3105](https://github.com/moment/moment/pull/3105) Add localeSorted argument to weekday listers
-* [#3102](https://github.com/moment/moment/pull/3102) Add k and kk formatting tokens
-
-## Bugfixes
-* [#3109](https://github.com/moment/moment/pull/3109) Fix [#1756](https://github.com/moment/moment/issues/1756) Resolved thread-safe issue on server side.
-* [#3078](https://github.com/moment/moment/pull/3078) Fix parsing for months/weekdays with weird characters
-* [#3098](https://github.com/moment/moment/pull/3098) Use Z suffix when in UTC mode ([#3020](https://github.com/moment/moment/issues/3020))
-* [#2995](https://github.com/moment/moment/pull/2995) Fix floating point rounding errors in durations
-* [#3059](https://github.com/moment/moment/pull/3059) fix bug where diff returns -0 in month-related diffs
-* [#3045](https://github.com/moment/moment/pull/3045) Fix mistaking any input for 'a' token
-* [#2877](https://github.com/moment/moment/pull/2877) Use explicit .valueOf() calls instead of coercion
-* [#3036](https://github.com/moment/moment/pull/3036) Year setter should keep time when DST changes
-
-Plus 3 new locales and locale fixes.
-
-### 2.12.0 [See full changelog](https://gist.github.com/ichernev/6e5bfdf8d6522fc4ac73)
 
-- Release March 7, 2016
+- Async is now modularized. Individual functions can be `require()`d from the main package. (`require('async/auto')`) (#984, #996)
+- Async is also available as a collection of ES2015 modules in the new `async-es` package. (`import {forEachSeries} from 'async-es'`) (#984, #996)
+- Added `race`, analogous to `Promise.race()`. It will run an array of async tasks in parallel and will call its callback with the result of the first task to respond. (#568, #1038)
+- Collection methods now accept ES2015 iterators.  Maps, Sets, and anything that implements the iterator spec can now be passed directly to `each`, `map`, `parallel`, etc.. (#579, #839, #1074)
+- Added `mapValues`, for mapping over the properties of an object and returning an object with the same keys. (#1157, #1177)
+- Added `timeout`, a wrapper for an async function that will make the task time-out after the specified time. (#1007, #1027)
+- Added `reflect` and `reflectAll`, analagous to [`Promise.reflect()`](http://bluebirdjs.com/docs/api/reflect.html), a wrapper for async tasks that always succeeds, by gathering results and errors into an object.  (#942, #1012, #1095)
+- `constant` supports dynamic arguments -- it will now always use its last argument as the callback. (#1016, #1052)
+- `setImmediate` and `nextTick` now support arguments to partially apply to the deferred function, like the node-native versions do. (#940, #1053)
+- `auto` now supports resolving cyclic dependencies using [Kahn's algorithm](https://en.wikipedia.org/wiki/Topological_sorting#Kahn.27s_algorithm) (#1140).
+- Added `autoInject`, a relative of `auto` that automatically spreads a task's dependencies as arguments to the task function. (#608, #1055, #1099, #1100)
+- You can now limit the concurrency of `auto` tasks. (#635, #637)
+- Added `retryable`, a relative of `retry` that wraps an async function, making it retry when called. (#1058)
+- `retry` now supports specifying a function that determines the next time interval, useful for exponential backoff, logging and other retry strategies. (#1161)
+- `retry` will now pass all of the arguments the task function was resolved with to the callback (#1231).
+- Added `q.unsaturated` -- callback called when a `queue`'s number of running workers falls below a threshold. (#868, #1030, #1033, #1034)
+- Added `q.error` -- a callback called whenever a `queue` task calls its callback with an error. (#1170)
+- `applyEach` and `applyEachSeries` now pass results to the final callback. (#1088)
 
-## Enhancements:
-* [#2932](https://github.com/moment/moment/pull/2932) List loaded locales
-* [#2818](https://github.com/moment/moment/pull/2818) Parse ISO-8061 duration containing both day and week values
-* [#2774](https://github.com/moment/moment/pull/2774) Implement locale inheritance and locale updating
+## Breaking changes
 
-## Bugfixes:
-* [#2970](https://github.com/moment/moment/pull/2970) change add subtract to handle decimal values by rounding
-* [#2887](https://github.com/moment/moment/pull/2887) Fix toJSON casting of invalid moment
-* [#2897](https://github.com/moment/moment/pull/2897) parse string arguments for month() correctly, closes #2884
-* [#2946](https://github.com/moment/moment/pull/2946) Fix usage suggestions for min and max
+- Calling a callback more than once is considered an error, and an error will be thrown. This had an explicit breaking change in `waterfall`. If you were relying on this behavior, you should more accurately represent your control flow as an event emitter or stream. (#814, #815, #1048, #1050)
+- `auto` task functions now always take the callback as the last argument. If a task has dependencies, the `results` object will be passed as the first argument. To migrate old task functions, wrap them with [`_.flip`](https://lodash.com/docs#flip) (#1036, #1042)
+- Internal `setImmediate` calls have been refactored away. This may make existing flows vulnerable to stack overflows if you use many synchronous functions in series. Use `ensureAsync` to work around this. (#696, #704, #1049, #1050)
+- `map` used to return an object when iterating over an object.  `map` now always returns an array, like in other libraries.  The previous object behavior has been split out into `mapValues`. (#1157, #1177)
+- `filter`, `reject`, `some`, `every`, and related functions now expect an error as the first callback argument, rather than just a simple boolean. Pass `null` as the first argument, or use `fs.access` instead of `fs.exists`. (#118, #774, #1028, #1041)
+- `{METHOD}` and `{METHOD}Series` are now implemented in terms of `{METHOD}Limit`. This is a major internal simplification, and is not expected to cause many problems, but it does subtly affect how functions execute internally. (#778, #847)
+- `retry`'s callback is now optional. Previously, omitting the callback would partially apply the function, meaning it could be passed directly as a task to `series` or `auto`. The partially applied "control-flow" behavior has been separated out into `retryable`. (#1054, #1058)
+- The test function for `whilst`, `until`, and `during` used to be passed non-error args from the iteratee function's callback, but this led to weirdness where the first call of the test function would be passed no args. We have made it so the test function is never passed extra arguments, and only the `doWhilst`, `doUntil`, and `doDuring` functions pass iteratee callback arguments to the test function (#1217, #1224)
+- The `q.tasks` array has been renamed `q._tasks` and is now implemented as a doubly linked list (DLL). Any code that used to interact with this array will need to be updated to either use the provided helpers or support DLLs (#1205).
+- The timing of the `q.saturated()` callback in a `queue` has been modified to better reflect when tasks pushed to the queue will start queueing. (#724, #1078)
+- Removed `iterator` method in favour of [ES2015 iterator protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators ) which natively supports arrays (#1237)
+- Dropped support for Component, Jam, SPM, and Volo (#1175, ##176)
 
-## New locales:
-* [#2917](https://github.com/moment/moment/pull/2917) Locale Punjabi(Gurmukhi) India format conversion
+## Bug Fixes
 
-And more
+- Improved handling of no dependency cases in `auto` & `autoInject` (#1147).
+- Fixed a bug where the callback generated by `asyncify` with  `Promises` could resolve twice (#1197).
+- Fixed several documented optional callbacks not actually being optional (#1223).
 
-### 2.11.2 (Fix ReDoS attack vector)
+## Other
 
-- Release February 7, 2016
+- Added `someSeries` and `everySeries` for symmetry, as well as a complete set of `any`/`anyLimit`/`anySeries` and `all`/`/allLmit`/`allSeries` aliases.
+- Added `find` as an alias for `detect. (as well as `findLimit` and `findSeries`).
+- Various doc fixes (#1005, #1008, #1010, #1015, #1021, #1037, #1039, #1051, #1102, #1107, #1121, #1123, #1129, #1135, #1138, #1141, #1153, #1216, #1217, #1232, #1233, #1236, #1238)
 
-* [#2939](https://github.com/moment/moment/pull/2939) use full-string match to speed up aspnet regex match
+Thank you [**@aearly**](github.com/aearly) and [**@megawac**](github.com/megawac) for taking the lead on version 2 of async.
 
-### 2.11.1 [See full changelog](https://gist.github.com/ichernev/8ec3ee25b749b4cff3c2)
+------------------------------------------
 
-- Release January 9, 2016
+# v1.5.2
+- Allow using `"constructor"` as an argument in `memoize` (#998)
+- Give a better error messsage when `auto` dependency checking fails (#994)
+- Various doc updates (#936, #956, #979, #1002)
 
-## Bugfixes:
-* [#2881](https://github.com/moment/moment/pull/2881) Revert "Merge pull request #2746 from mbad0la:develop" Sep->Sept
-* [#2868](https://github.com/moment/moment/pull/2868) Add format and parse token Y, so it actually works
-* [#2865](https://github.com/moment/moment/pull/2865) Use typeof checks for undefined for global variables
-* [#2858](https://github.com/moment/moment/pull/2858) Fix Date mocking regression introduced in 2.11.0
-* [#2864](https://github.com/moment/moment/pull/2864) Include changelog in npm release
-* [#2830](https://github.com/moment/moment/pull/2830) dep: add grunt-cli
-* [#2869](https://github.com/moment/moment/pull/2869) Fix months parsing for some locales
+# v1.5.1
+- Fix issue with `pause` in `queue` with concurrency enabled (#946)
+- `while` and `until` now pass the final result to callback (#963)
+- `auto` will properly handle concurrency when there is no callback (#966)
+- `auto` will no. properly stop execution when an error occurs (#988, #993)
+- Various doc fixes (#971, #980)
 
-### 2.11.0 [See full changelog](https://gist.github.com/ichernev/6594bc29719dde6b2f66)
+# v1.5.0
 
-- Release January 4, 2016
+- Added `transform`, analogous to [`_.transform`](http://lodash.com/docs#transform) (#892)
+- `map` now returns an object when an object is passed in, rather than array with non-numeric keys. `map` will begin always returning an array with numeric indexes in the next major release. (#873)
+- `auto` now accepts an optional `concurrency` argument to limit the number o. running tasks (#637)
+- Added `queue#workersList()`, to retrieve the lis. of currently running tasks. (#891)
+- Various code simplifications (#896, #904)
+- Various doc fixes :scroll: (#890, #894, #903, #905, #912)
 
-* [#2624](https://github.com/moment/moment/pull/2624) Proper handling of invalid moments
-* [#2634](https://github.com/moment/moment/pull/2634) Fix strict month parsing issue in cs,ru,sk
-* [#2735](https://github.com/moment/moment/pull/2735) Reset the locale back to 'en' after defining all locales in min/locales.js
-* [#2702](https://github.com/moment/moment/pull/2702) Week rework
-* [#2746](https://github.com/moment/moment/pull/2746) Changed September Abbreviation to "Sept" in locale-specific english
-  files and default locale file
-* [#2646](https://github.com/moment/moment/pull/2646) Fix [#2645](https://github.com/moment/moment/pull/2645) - invalid dates pre-1970
+# v1.4.2
 
-* [#2641](https://github.com/moment/moment/pull/2641) Implement basic format and comma as ms separator in ISO 8601
-* [#2665](https://github.com/moment/moment/pull/2665) Implement stricter weekday parsing
-* [#2700](https://github.com/moment/moment/pull/2700) Add [Hh]mm and [Hh]mmss formatting tokens, so you can parse 123 with
-  hmm for example
-* [#2565](https://github.com/moment/moment/pull/2565) [#2835](https://github.com/moment/moment/pull/2835) Expose arguments used for moment creation with creationData
-  (fix [#2443](https://github.com/moment/moment/pull/2443))
-* [#2648](https://github.com/moment/moment/pull/2648) fix issue [#2640](https://github.com/moment/moment/pull/2640): support instanceof operator
-* [#2709](https://github.com/moment/moment/pull/2709) Add isSameOrAfter and isSameOrBefore comparison methods
-* [#2721](https://github.com/moment/moment/pull/2721) Fix moment creation from object with strings values
-* [#2740](https://github.com/moment/moment/pull/2740) Enable 'd hh:mm:ss.sss' format for durations
-* [#2766](https://github.com/moment/moment/pull/2766) [#2833](https://github.com/moment/moment/pull/2833) Alternate Clock Source Support
+- Ensure coverage files don't get published on npm (#879)
 
-### 2.10.6
+# v1.4.1
 
-- Release July 28, 2015
+- Add in overlooked `detectLimit` method (#866)
+- Removed unnecessary files from npm releases (#861)
+- Removed usage of a reserved word to prevent :boom: in older environments (#870)
 
-[#2515](https://github.com/moment/moment/pull/2515) Fix regression introduced
-in `2.10.5` related to `moment.ISO_8601` parsing.
+# v1.4.0
 
-### 2.10.5 [See full changelog](https://gist.github.com/ichernev/6ec13ac7efc396da44b2)
+- `asyncify` now supports promises (#840)
+- Added `Limit` versions of `filter` and `reject` (#836)
+- Add `Limit` versions of `detect`, `some` and `every` (#828, #829)
+- `some`, `every` and `detect` now short circuit early (#828, #829)
+- Improve detection of the global object (#804), enabling use in WebWorkers
+- `whilst` now called with arguments from iterator (#823)
+- `during` now gets called with arguments from iterator (#824)
+- Code simplifications and optimizations aplenty ([diff](https://github.com/caolan/async/compare/v1.3.0...v1.4.0))
 
-- Release July 26, 2015
 
-Important changes:
-* [#2357](https://github.com/moment/moment/pull/2357) Improve unit bubbling for ISO dates
-  this fixes day to year conversions to work around end-of-year (~365 days). As
-  a side effect 365 days is 11 months and 30 days, and 366 days is one year.
-* [#2438](https://github.com/moment/moment/pull/2438) Fix inconsistent moment.min and moment.max results
-  Return invalid result if any of the inputs is invalid
-* [#2494](https://github.com/moment/moment/pull/2494) Fix two digit year parsing with YYYY format
-  This brings the benefits of YY to YYYY
-* [#2368](https://github.com/moment/moment/pull/2368) perf: use faster form of copying dates, across the board improvement
+# v1.3.0
 
+New Features:
+- Added `constant`
+- Added `asyncify`/`wrapSync` for making sync functions work with callbacks. (#671, #806)
+- Added `during` and `doDuring`, which are like `whilst` with an async truth test. (#800)
+- `retry` now accepts an `interval` parameter to specify a delay between retries. (#793)
+- `async` should work better in Web Workers due to better `root` detection (#804)
+- Callbacks are now optional in `whilst`, `doWhilst`, `until`, and `doUntil` (#642)
+- Various internal updates (#786, #801, #802, #803)
+- Various doc fixes (#790, #794)
 
-### 2.10.3 [See full changelog](https://gist.github.com/ichernev/f264b9bed5b00f8b1b7f)
+Bug Fixes:
+- `cargo` now exposes the `payload` size, and `cargo.payload` can be changed on the fly after the `cargo` is created. (#740, #744, #783)
 
-- Release May 13, 2015
 
-* add `moment.fn.to` and `moment.fn.toNow` (similar to `from` and `fromNow`)
-* new locales (Sinhalese (si), Montenegrin (me), Javanese (ja))
-* performance improvements
+# v1.2.1
 
-### 2.10.2
+Bug Fix:
 
-- Release April 9, 2015
+- Small regression with synchronous iterator behavior in `eachSeries` with a 1-element array. Before 1.1.0, `eachSeries`'s callback was called on the same tick, which this patch restores. In 2.0.0, it will be called on the next tick. (#782)
 
-* fixed moment-with-locales in browser env caused by esperanto change
 
-### 2.10.1
+# v1.2.0
 
-* regression: Add moment.duration.fn back
+New Features:
 
-### 2.10.0
+- Added `timesLimit` (#743)
+- `concurrency` can be changed after initialization in `queue` by setting `q.concurrency`. The new concurrency will be reflected the next time a task is processed. (#747, #772)
 
-Ported code to es6 modules.
+Bug Fixes:
 
-### 2.9.0 [See full changelog](https://gist.github.com/ichernev/0c9a9b49951111a27ce7)
+- Fixed a regression in `each` and family with empty arrays that have additional properties. (#775, #777)
 
-- Release January 8, 2015
 
-languages:
-* [2104](https://github.com/moment/moment/issues/2104) Frisian (fy) language file with unit test
-* [2097](https://github.com/moment/moment/issues/2097) add ar-tn locale
+# v1.1.1
 
-deprecations:
-* [2074](https://github.com/moment/moment/issues/2074) Implement `moment.fn.utcOffset`, deprecate `moment.fn.zone`
+Bug Fix:
 
-features:
-* [2088](https://github.com/moment/moment/issues/2088) add moment.fn.isBetween
-* [2054](https://github.com/moment/moment/issues/2054) Call updateOffset when creating moment (needed for default timezone in
-  moment-timezone)
-* [1893](https://github.com/moment/moment/issues/1893) Add moment.isDate method
-* [1825](https://github.com/moment/moment/issues/1825) Implement toJSON function on Duration
-* [1809](https://github.com/moment/moment/issues/1809) Allowing moment.set() to accept a hash of units
-* [2128](https://github.com/moment/moment/issues/2128) Add firstDayOfWeek, firstDayOfYear locale getters
-* [2131](https://github.com/moment/moment/issues/2131) Add quarter diff support
+- Small regression with synchronous iterator behavior in `eachSeries` with a 1-element array. Before 1.1.0, `eachSeries`'s callback was called on the same tick, which this patch restores. In 2.0.0, it will be called on the next tick. (#782)
 
-Some bugfixes and language improvements -- [full changelog](https://gist.github.com/ichernev/0c9a9b49951111a27ce7)
 
-### 2.8.4 [See full changelog](https://gist.github.com/ichernev/a4fcb0a46d74e4b9b996)
+# v1.1.0
 
-- Release November 19, 2014
+New Features:
 
-Features:
+- `cargo` now supports all of the same methods and event callbacks as `queue`.
+- Added `ensureAsync` - A wrapper that ensures an async function calls its callback on a later tick. (#769)
+- Optimized `map`, `eachOf`, and `waterfall` families of functions
+- Passing a `null` or `undefined` array to `map`, `each`, `parallel` and families will be treated as an empty array (#667).
+- The callback is now optional for the composed results of `compose` and `seq`. (#618)
+- Reduced file size by 4kb, (minified version by 1kb)
+- Added code coverage through `nyc` and `coveralls` (#768)
 
-* [#2000](https://github.com/moment/moment/issues/2000) Add LTS localised format that includes seconds
-* [#1960](https://github.com/moment/moment/issues/1960) added formatToken 'x' for unix offset in milliseconds #1938
-* [#1965](https://github.com/moment/moment/issues/1965) Support 24:00:00.000 to mean next day, at midnight.
-* [#2002](https://github.com/moment/moment/issues/2002) Accept 'date' key when creating moment with object
-* [#2009](https://github.com/moment/moment/issues/2009) Use native toISOString when we can
+Bug Fixes:
 
-Some bugfixes and language improvements -- [full changelog](https://gist.github.com/ichernev/a4fcb0a46d74e4b9b996)
+- `forever` will no longer stack overflow with a synchronous iterator (#622)
+- `eachLimit` and other limit functions will stop iterating once an error occurs (#754)
+- Always pass `null` in callbacks when there is no error (#439)
+- Ensure proper conditions when calling `drain()` after pushing an empty data set to a queue (#668)
+- `each` and family will properly handle an empty array (#578)
+- `eachSeries` and family will finish if the underlying array is modified during execution (#557)
+- `queue` will throw if a non-function is passed to `q.push()` (#593)
+- Doc fixes (#629, #766)
 
-### 2.8.3
 
-- Release September 5, 2014
+# v1.0.0
 
-Bugfixes:
+No known breaking changes, we are simply complying with semver from here on out.
 
-* [#1801](https://github.com/moment/moment/issues/1801) proper pluralization for Arabic
-* [#1833](https://github.com/moment/moment/issues/1833) improve spm integration
-* [#1871](https://github.com/moment/moment/issues/1871) fix zone bug caused by Firefox 24
-* [#1882](https://github.com/moment/moment/issues/1882) Use hh:mm in Czech
-* [#1883](https://github.com/moment/moment/issues/1883) Fix 2.8.0 regression in duration as conversions
-* [#1890](https://github.com/moment/moment/issues/1890) Faster travis builds
-* [#1892](https://github.com/moment/moment/issues/1892) Faster isBefore/After/Same
-* [#1848](https://github.com/moment/moment/issues/1848) Fix flaky month diffs
-* [#1895](https://github.com/moment/moment/issues/1895) Fix 2.8.0 regression in moment.utc with format array
-* [#1896](https://github.com/moment/moment/issues/1896) Support setting invalid instance locale (noop)
-* [#1897](https://github.com/moment/moment/issues/1897) Support moment([str]) in addition to moment([int])
+Changes:
 
-### 2.8.2
-
-- Release August 22, 2014
-
-Minor bugfixes:
-
-* [#1874](https://github.com/moment/moment/issues/1874) use `Object.prototype.hasOwnProperty`
-  instead of `obj.hasOwnProperty` (ie8 bug)
-* [#1873](https://github.com/moment/moment/issues/1873) add `duration#toString()`
-* [#1859](https://github.com/moment/moment/issues/1859) better month/weekday names in norwegian
-* [#1812](https://github.com/moment/moment/issues/1812) meridiem parsing for greek
-* [#1804](https://github.com/moment/moment/issues/1804) spanish del -> de
-* [#1800](https://github.com/moment/moment/issues/1800) korean LT improvement
-
-### 2.8.1
-
-- Release August 1, 2014
-
-* bugfix [#1813](https://github.com/moment/moment/issues/1813): fix moment().lang([key]) incompatibility
-
-### 2.8.0 [See changelog](https://gist.github.com/ichernev/ac3899324a5fa6c8c9b4)
-
-- Release July 31, 2014
-
-* incompatible changes
-    * [#1761](https://github.com/moment/moment/issues/1761): moments created without a language are no longer following the global language, in case it changes. Only newly created moments take the global language by default. In case you're affected by this, wait, comment on [#1797](https://github.com/moment/moment/issues/1797) and wait for a proper reimplementation
-    * [#1642](https://github.com/moment/moment/issues/1642): 45 days is no longer "a month" according to humanize, cutoffs for month, and year have changed. Hopefully your code does not depend on a particular answer from humanize (which it shouldn't anyway)
-    * [#1784](https://github.com/moment/moment/issues/1784): if you use the human readable English datetime format in a weird way (like storing them in a database) that would break when the format changes you're at risk.
-
-* deprecations (old behavior will be dropped in 3.0)
-    * [#1761](https://github.com/moment/moment/issues/1761) `lang` is renamed to `locale`, `langData` -> `localeData`. Also there is now `defineLocale` that should be used when creating new locales
-    * [#1763](https://github.com/moment/moment/issues/1763) `add(unit, value)` and `subtract(unit, value)` are now deprecated. Use `add(value, unit)` and `subtract(value, unit)` instead.
-    * [#1759](https://github.com/moment/moment/issues/1759) rename `duration.toIsoString` to `duration.toISOString`. The js standard library and moment's `toISOString` follow that convention.
-
-* new locales
-    * [#1789](https://github.com/moment/moment/issues/1789) Tibetan (bo)
-    * [#1786](https://github.com/moment/moment/issues/1786) Africaans (af)
-    * [#1778](https://github.com/moment/moment/issues/1778) Burmese (my)
-    * [#1727](https://github.com/moment/moment/issues/1727) Belarusian (be)
-
-* bugfixes, locale bugfixes, performance improvements, features
-
-### 2.7.0 [See changelog](https://gist.github.com/ichernev/b0a3d456d5a84c9901d7)
-
-- Release June 12, 2014
-
-* new languages
-
-  * [#1678](https://github.com/moment/moment/issues/1678) Bengali (bn)
-  * [#1628](https://github.com/moment/moment/issues/1628) Azerbaijani (az)
-  * [#1633](https://github.com/moment/moment/issues/1633) Arabic, Saudi Arabia (ar-sa)
-  * [#1648](https://github.com/moment/moment/issues/1648) Austrian German (de-at)
-
-* features
-
-  * [#1663](https://github.com/moment/moment/issues/1663) configurable relative time thresholds
-  * [#1554](https://github.com/moment/moment/issues/1554) support anchor time in moment.calendar
-  * [#1693](https://github.com/moment/moment/issues/1693) support moment.ISO_8601 as parsing format
-  * [#1637](https://github.com/moment/moment/issues/1637) add moment.min and moment.max and deprecate min/max instance methods
-  * [#1704](https://github.com/moment/moment/issues/1704) support string value in add/subtract
-  * [#1647](https://github.com/moment/moment/issues/1647) add spm support (package manager)
-
-* bugfixes
-
-### 2.6.0 [See changelog](https://gist.github.com/ichernev/10544682)
-
-- Release April 12 , 2014
-
-* languages
-  * [#1529](https://github.com/moment/moment/issues/1529) Serbian-Cyrillic (sr-cyr)
-  * [#1544](https://github.com/moment/moment/issues/1544), [#1546](https://github.com/moment/moment/issues/1546) Khmer Cambodia (km)
-
-* features
-    * [#1419](https://github.com/moment/moment/issues/1419), [#1468](https://github.com/moment/moment/issues/1468), [#1467](https://github.com/moment/moment/issues/1467), [#1546](https://github.com/moment/moment/issues/1546) better handling of timezone-d moments around DST
-    * [#1462](https://github.com/moment/moment/issues/1462) add weeksInYear and isoWeeksInYear
-    * [#1475](https://github.com/moment/moment/issues/1475) support ordinal parsing
-    * [#1499](https://github.com/moment/moment/issues/1499) composer support
-    * [#1577](https://github.com/moment/moment/issues/1577), [#1604](https://github.com/moment/moment/issues/1604) put Date parsing in moment.createFromInputFallback so it can be properly deprecated and controlled in the future
-    * [#1545](https://github.com/moment/moment/issues/1545) extract two-digit year parsing in moment.parseTwoDigitYear, so it can be overwritten
-    * [#1590](https://github.com/moment/moment/issues/1590) (see [#1574](https://github.com/moment/moment/issues/1574)) set AMD global before module definition to better support non AMD module dependencies used in AMD environment
-    * [#1589](https://github.com/moment/moment/issues/1589) remove global in Node.JS environment (was not working before, nobody complained, was scheduled for removal anyway)
-    * [#1586](https://github.com/moment/moment/issues/1586) support quarter setting and parsing
-
-* 18 bugs fixed
-
-### 2.5.1
-
-- Release January 22, 2014
-
-* languages
-  * [#1392](https://github.com/moment/moment/issues/1392) Armenian (hy-am)
-
-* bugfixes
-  * [#1429](https://github.com/moment/moment/issues/1429) fixes [#1423](https://github.com/moment/moment/issues/1423) weird chrome-32 bug with js object creation
-  * [#1421](https://github.com/moment/moment/issues/1421) remove html entities from Welsh
-  * [#1418](https://github.com/moment/moment/issues/1418) fixes [#1401](https://github.com/moment/moment/issues/1401) improved non-padded tokens in strict matching
-  * [#1417](https://github.com/moment/moment/issues/1417) fixes [#1404](https://github.com/moment/moment/issues/1404) handle buggy moment object created by property cloning
-  * [#1398](https://github.com/moment/moment/issues/1398) fixes [#1397](https://github.com/moment/moment/issues/1397) fix Arabic-like week number parsing
-  * [#1396](https://github.com/moment/moment/issues/1396) add leftZeroFill(4) to GGGG and gggg formats
-  * [#1373](https://github.com/moment/moment/issues/1373) use lowercase for months and days in Catalan
-
-* testing
-  * [#1374](https://github.com/moment/moment/issues/1374) run tests on multiple browser/os combos via SauceLabs and Travis
-
-### 2.5.0 [See changelog](https://gist.github.com/ichernev/8104451)
-
-- Release Dec 24, 2013
-
-* New languages
-  * Luxemburish (lb) [1247](https://github.com/moment/moment/issues/1247)
-  * Serbian (rs) [1319](https://github.com/moment/moment/issues/1319)
-  * Tamil (ta) [1324](https://github.com/moment/moment/issues/1324)
-  * Macedonian (mk) [1337](https://github.com/moment/moment/issues/1337)
-
-* Features
-  * [1311](https://github.com/moment/moment/issues/1311) Add quarter getter and format token `Q`
-  * [1303](https://github.com/moment/moment/issues/1303) strict parsing now respects number of digits per token (fix [1196](https://github.com/moment/moment/issues/1196))
-  * 0d30bb7 add jspm support
-  * [1347](https://github.com/moment/moment/issues/1347) improve zone parsing
-  * [1362](https://github.com/moment/moment/issues/1362) support merideam parsing in Korean
-
-* 22 bugfixes
-
-### 2.4.0
-
-- Release Oct 27, 2013
-
-* **Deprecate** globally exported moment, will be removed in next major
-* New languages
-  * Farose (fo) [#1206](https://github.com/moment/moment/issues/1206)
-  * Tagalog/Filipino (tl-ph) [#1197](https://github.com/moment/moment/issues/1197)
-  * Welsh (cy) [#1215](https://github.com/moment/moment/issues/1215)
-* Bugfixes
-  * properly handle Z at the end of iso RegExp [#1187](https://github.com/moment/moment/issues/1187)
-  * chinese meridian time improvements [#1076](https://github.com/moment/moment/issues/1076)
-  * fix language tests [#1177](https://github.com/moment/moment/issues/1177)
-  * remove some failing tests (that should have never existed :))
-    [#1185](https://github.com/moment/moment/issues/1185)
-    [#1183](https://github.com/moment/moment/issues/1183)
-  * handle russian noun cases in weird cases [#1195](https://github.com/moment/moment/issues/1195)
-
-### 2.3.1
-
-- Release Oct 9, 2013
-
-Removed a trailing comma [1169] and fixed a bug with `months`, `weekdays` getters [#1171](https://github.com/moment/moment/issues/1171).
-
-### 2.3.0 [See changelog](https://gist.github.com/ichernev/6864354)
-
-- Release Oct 7, 2013
-
-Changed isValid, added strict parsing.
-Week tokens parsing.
-
-### 2.2.1
-
-- Release Sep 12, 2013
-
-Fixed bug in string prototype test.
-Updated authors and contributors.
-
-### 2.2.0 [See changelog](https://gist.github.com/ichernev/00f837a9baf46a3565e4)
-
-- Release  Sep 11, 2013
-
-Added bower support.
-
-Language files now use UMD.
-
-Creating moment defaults to current date/month/year.
-
-Added a bundle of moment and all language files.
-
-### 2.1.0 [See changelog](https://gist.github.com/timrwood/b8c2d90d528eddb53ab5)
-
-- Release Jul 8, 2013
-
-Added better week support.
-
-Added ability to set offset with `moment#zone`.
-
-Added ability to set month or weekday from a string.
-
-Added `moment#min` and `moment#max`
-
-### 2.0.0 [See changelog](https://gist.github.com/timrwood/e72f2eef320ed9e37c51)
-
-- Release Feb 9, 2013
-
-Added short form localized tokens.
-
-Added ability to define language a string should be parsed in.
-
-Added support for reversed add/subtract arguments.
-
-Added support for `endOf('week')` and `startOf('week')`.
-
-Fixed the logic for `moment#diff(Moment, 'months')` and `moment#diff(Moment, 'years')`
-
-`moment#diff` now floors instead of rounds.
-
-Normalized `moment#toString`.
-
-Added `isSame`, `isAfter`, and `isBefore` methods.
-
-Added better week support.
-
-Added `moment#toJSON`
-
-Bugfix: Fixed parsing of first century dates
-
-Bugfix: Parsing 10Sep2001 should work as expected
-
-Bugfix: Fixed weirdness with `moment.utc()` parsing.
-
-Changed language ordinal method to return the number + ordinal instead of just the ordinal.
-
-Changed two digit year parsing cutoff to match strptime.
-
-Removed `moment#sod` and `moment#eod` in favor of `moment#startOf` and `moment#endOf`.
-
-Removed `moment.humanizeDuration()` in favor of `moment.duration().humanize()`.
-
-Removed the lang data objects from the top level namespace.
-
-Duplicate `Date` passed to `moment()` instead of referencing it.
-
-### 1.7.2 [See discussion](https://github.com/timrwood/moment/issues/456)
-
-- Release Oct 2, 2012
-
-Bugfixes
-
-### 1.7.1 [See discussion](https://github.com/timrwood/moment/issues/384)
-
-- Release Oct 1, 2012
-
-Bugfixes
-
-### 1.7.0 [See discussion](https://github.com/timrwood/moment/issues/288)
-
-- Release Jul 26, 2012
-
-Added `moment.fn.endOf()` and `moment.fn.startOf()`.
-
-Added validation via `moment.fn.isValid()`.
-
-Made formatting method 3x faster. http://jsperf.com/momentjs-cached-format-functions
-
-Add support for month/weekday callbacks in `moment.fn.format()`
-
-Added instance specific languages.
-
-Added two letter weekday abbreviations with the formatting token `dd`.
-
-Various language updates.
-
-Various bugfixes.
-
-### 1.6.0 [See discussion](https://github.com/timrwood/moment/pull/268)
-
-- Release Apr 26, 2012
-
-Added Durations.
-
-Revamped parser to support parsing non-separated strings (YYYYMMDD vs YYYY-MM-DD).
-
-Added support for millisecond parsing and formatting tokens (S SS SSS)
-
-Added a getter for `moment.lang()`
-
-Various bugfixes.
-
-There are a few things deprecated in the 1.6.0 release.
-
-1. The format tokens `z` and `zz` (timezone abbreviations like EST CST MST etc) will no longer be supported. Due to inconsistent browser support, we are unable to consistently produce this value. See [this issue](https://github.com/timrwood/moment/issues/162) for more background.
-
-2. The method `moment.fn.native` is deprecated in favor of `moment.fn.toDate`. There continue to be issues with Google Closure Compiler throwing errors when using `native`, even in valid instances.
-
-3. The way to customize am/pm strings is being changed. This would only affect you if you created a custom language file. For more information, see [this issue](https://github.com/timrwood/moment/pull/222).
-
-### 1.5.0 [See milestone](https://github.com/timrwood/moment/issues?milestone=10&page=1&state=closed)
-
-- Release Mar 20, 2012
-
-Added UTC mode.
-
-Added automatic ISO8601 parsing.
-
-Various bugfixes.
-
-### 1.4.0 [See milestone](https://github.com/timrwood/moment/issues?milestone=8&state=closed)
-
-- Release Feb 4, 2012
-
-Added `moment.fn.toDate` as a replacement for `moment.fn.native`.
-
-Added `moment.fn.sod` and `moment.fn.eod` to get the start and end of day.
-
-Various bugfixes.
-
-### 1.3.0 [See milestone](https://github.com/timrwood/moment/issues?milestone=7&state=closed)
-
-- Release Jan 5, 2012
-
-Added support for parsing month names in the current language.
-
-Added escape blocks for parsing tokens.
-
-Added `moment.fn.calendar` to format strings like 'Today 2:30 PM', 'Tomorrow 1:25 AM', and 'Last Sunday 4:30 AM'.
-
-Added `moment.fn.day` as a setter.
-
-Various bugfixes
-
-### 1.2.0 [See milestone](https://github.com/timrwood/moment/issues?milestone=4&state=closed)
-
-- Release Dec 7, 2011
-
-Added timezones to parser and formatter.
-
-Added `moment.fn.isDST`.
-
-Added `moment.fn.zone` to get the timezone offset in minutes.
-
-### 1.1.2 [See milestone](https://github.com/timrwood/moment/issues?milestone=6&state=closed)
-
-- Release Nov 18, 2011
-
-Various bugfixes
-
-### 1.1.1 [See milestone](https://github.com/timrwood/moment/issues?milestone=5&state=closed)
-
-- Release Nov 12, 2011
-
-Added time specific diffs (months, days, hours, etc)
-
-### 1.1.0
-
-- Release Oct 28, 2011
-
-Added `moment.fn.format` localized masks. 'L LL LLL LLLL' [issue 29](https://github.com/timrwood/moment/pull/29)
-
-Fixed [issue 31](https://github.com/timrwood/moment/pull/31).
-
-### 1.0.1
-
-- Release Oct 18, 2011
-
-Added `moment.version` to get the current version.
-
-Removed `window !== undefined` when checking if module exists to support browserify. [issue 25](https://github.com/timrwood/moment/pull/25)
-
-### 1.0.0
-
-- Release
-
-Added convenience methods for getting and setting date parts.
-
-Added better support for `moment.add()`.
-
-Added better lang support in NodeJS.
-
-Renamed library from underscore.date to Moment.js
-
-### 0.6.1
-
-- Release Oct 12, 2011
-
-Added Portuguese, Italian, and French language support
-
-### 0.6.0
-
-- Release Sep 21, 2011
-
-Added _date.lang() support.
-Added support for passing multiple formats to try to parse a date. _date("07-10-1986", ["MM-DD-YYYY", "YYYY-MM-DD"]);
-Made parse from string and single format 25% faster.
-
-### 0.5.2
-
-- Release Jul 11, 2011
-
-Bugfix for [issue 8](https://github.com/timrwood/underscore.date/pull/8) and [issue 9](https://github.com/timrwood/underscore.date/pull/9).
-
-### 0.5.1
-
-- Release Jun 17, 2011
-
-Bugfix for [issue 5](https://github.com/timrwood/underscore.date/pull/5).
-
-### 0.5.0
-
-- Release Jun 13, 2011
-
-Dropped the redundant `_date.date()` in favor of `_date()`.
-Removed `_date.now()`, as it is a duplicate of `_date()` with no parameters.
-Removed `_date.isLeapYear(yearNumber)`. Use `_date([yearNumber]).isLeapYear()` instead.
-Exposed customization options through the `_date.relativeTime`, `_date.weekdays`, `_date.weekdaysShort`, `_date.months`, `_date.monthsShort`, and `_date.ordinal` variables instead of the `_date.customize()` function.
-
-### 0.4.1
-
-- Release May 9, 2011
-
-Added date input formats for input strings.
-
-### 0.4.0
-
-- Release May 9, 2011
-
-Added underscore.date to npm. Removed dependencies on underscore.
-
-### 0.3.2
-
-- Release Apr 9, 2011
-
-Added `'z'` and `'zz'` to `_.date().format()`. Cleaned up some redundant code to trim off some bytes.
-
-### 0.3.1
-
-- Release Mar 25, 2011
-
-Cleaned up the namespace. Moved all date manipulation and display functions to the _.date() object.
-
-### 0.3.0
-
-- Release Mar 25, 2011
-
-Switched to the Underscore methodology of not mucking with the native objects' prototypes.
-Made chaining possible.
-
-### 0.2.1
-
-- Release
-
-Changed date names to be a more pseudo standardized 'dddd, MMMM Do YYYY, h:mm:ss a'.
-Added `Date.prototype` functions `add`, `subtract`, `isdst`, and `isleapyear`.
-
-### 0.2.0
-
-- Release
-
-Changed function names to be more concise.
-Changed date format from php date format to custom format.
-
-### 0.1.0
-
-- Release
-
-Initial release
-
+- Start using a changelog!
+- Add `forEachOf` for iterating over Objects (or to iterate Arrays with indexes available) (#168 #704 #321)
+- Detect deadlocks in `auto` (#663)
+- Better support for require.js (#527)
+- Throw if queue created with concurrency `0` (#714)
+- Fix unneeded iteration in `queue.resume()` (#758)
+- Guard against timer mocking overriding `setImmediate` (#609 #611)
+- Miscellaneous doc fixes (#542 #596 #615 #628 #631 #690 #729)
+- Use single noop function internally (#546)
+- Optimize internal `_each`, `_map` and `_keys` functions.
