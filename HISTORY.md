@@ -1,51 +1,29 @@
-1.2.0 / 2016-06-01
+1.1.0 / 2015-09-29
 ==================
 
-  * Add `combine` option to combine overlapping ranges
+  * Only accept valid field names in the `field` argument
+    - Ensures the resulting string is a valid HTTP header value
 
-1.1.0 / 2016-05-13
+1.0.1 / 2015-07-08
 ==================
 
-  * Fix incorrectly returning -1 when there is at least one valid range
-  * perf: remove internal function
-
-1.0.3 / 2015-10-29
-==================
-
+  * Fix setting empty header from empty `field`
   * perf: enable strict mode
+  * perf: remove argument reassignments
 
-1.0.2 / 2014-09-08
+1.0.0 / 2014-08-10
 ==================
 
-  * Support Node.js 0.6
+  * Accept valid `Vary` header string as `field`
+  * Add `vary.append` for low-level string manipulation
+  * Move to `jshttp` orgainzation
 
-1.0.1 / 2014-09-07
+0.1.0 / 2014-06-05
 ==================
 
-  * Move repository to jshttp
+  * Support array of fields to set
 
-1.0.0 / 2013-12-11
-==================
-
-  * Add repository to package.json
-  * Add MIT license
-
-0.0.4 / 2012-06-17
-==================
-
-  * Change ret -1 for unsatisfiable and -2 when invalid
-
-0.0.3 / 2012-06-17
-==================
-
-  * Fix last-byte-pos default to len - 1
-
-0.0.2 / 2012-06-14
-==================
-
-  * Add `.type`
-
-0.0.1 / 2012-06-11
+0.0.0 / 2014-06-04
 ==================
 
   * Initial release
