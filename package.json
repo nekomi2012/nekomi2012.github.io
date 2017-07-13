@@ -1,129 +1,42 @@
 {
-  "name": "moment",
-  "version": "2.17.1",
-  "description": "Parse, validate, manipulate, and display dates",
-  "homepage": "http://momentjs.com",
+  "name": "scribe-js",
+  "description": "Comprehensive logging framework with online interface",
+  "version": "2.0.4",
+  "homepage": "https://github.com/bluejamesbond/Scribe.js",
+  "keywords": [],
   "author": {
-    "name": "Iskren Ivov Chernev",
-    "email": "iskren.chernev@gmail.com",
-    "url": "https://github.com/ichernev"
-  },
-  "contributors": [
-    {
-      "name": "Tim Wood",
-      "email": "washwithcare@gmail.com",
-      "url": "http://timwoodcreates.com/"
-    },
-    {
-      "name": "Rocky Meza",
-      "url": "http://rockymeza.com"
-    },
-    {
-      "name": "Matt Johnson",
-      "email": "mj1856@hotmail.com",
-      "url": "http://codeofmatt.com"
-    },
-    {
-      "name": "Isaac Cambron",
-      "email": "isaac@isaaccambron.com",
-      "url": "http://isaaccambron.com"
-    },
-    {
-      "name": "Andre Polykanine",
-      "email": "andre@oire.org",
-      "url": "https://github.com/oire"
-    }
-  ],
-  "keywords": [
-    "moment",
-    "date",
-    "time",
-    "parse",
-    "format",
-    "validate",
-    "i18n",
-    "l10n",
-    "ender"
-  ],
-  "main": "./moment.js",
-  "jsnext:main": "./src/moment.js",
-  "typings": "./moment.d.ts",
-  "engines": {
-    "node": "*"
+    "name": "Mathew Kurian",
+    "email": "MathewKurian@utexas.edu",
+    "url": "https://github.com/bluejamesbond"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/moment/moment.git"
+    "url": "git://github.com/bluejamesbond/Scribe.js.git"
   },
   "bugs": {
-    "url": "https://github.com/moment/moment/issues"
+    "url": "https://github.com/bluejamesbond/Scribe.js/issues"
   },
-  "license": "MIT",
-  "devDependencies": {
-    "uglify-js": "latest",
-    "es6-promise": "latest",
-    "grunt": "~0.4",
-    "grunt-cli": "latest",
-    "benchmark": "latest",
-    "grunt-contrib-clean": "latest",
-    "grunt-contrib-concat": "latest",
-    "grunt-contrib-copy": "latest",
-    "grunt-contrib-jshint": "latest",
-    "grunt-contrib-uglify": "latest",
-    "grunt-contrib-watch": "latest",
-    "grunt-env": "latest",
-    "grunt-jscs": "latest",
-    "grunt-karma": "latest",
-    "grunt-nuget": "latest",
-    "grunt-benchmark": "latest",
-    "grunt-string-replace": "latest",
-    "grunt-exec": "latest",
-    "load-grunt-tasks": "latest",
-    "karma": "latest",
-    "karma-chrome-launcher": "latest",
-    "karma-firefox-launcher": "latest",
-    "karma-qunit": "latest",
-    "karma-sauce-launcher": "latest",
-    "qunit": "^0.7.5",
-    "qunit-cli": "^0.1.4",
-    "rollup": "latest",
-    "spacejam": "latest",
-    "typescript": "^1.8.10",
-    "coveralls": "^2.11.2",
-    "nyc": "^2.1.4"
-  },
-  "ender": "./ender.js",
-  "dojoBuild": "package.js",
-  "jspm": {
-    "files": [
-      "moment.js",
-      "moment.d.ts",
-      "locale"
-    ],
-    "map": {
-      "moment": "./moment"
-    },
-    "buildConfig": {
-      "uglify": true
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/bluejamesbond/Scribe.js/blob/master/LICENSE-MIT"
     }
+  ],
+  "main": "scribe.js",
+  "license": "MIT",
+  "dependencies": {
+    "callsite": "^1.0.0",
+    "colors": "^1.0.0",
+    "express": "^4.0.0",
+    "mkdirp": "^0.5.0",
+    "moment": "^2.8.0"
   },
-  "scripts": {
-    "test": "grunt test",
-    "coverage": "nyc npm test && nyc report",
-    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
-  },
-  "spm": {
-    "main": "moment.js",
-    "output": [
-      "locale/*.js"
-    ]
-  },
-  "readme": "[![Join the chat at https://gitter.im/moment/moment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/moment/moment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)\n\n[![NPM version][npm-version-image]][npm-url] [![NPM downloads][npm-downloads-image]][npm-url] [![MIT License][license-image]][license-url] [![Build Status][travis-image]][travis-url]\n[![Coverage Status](https://coveralls.io/repos/moment/moment/badge.svg?branch=develop)](https://coveralls.io/r/moment/moment?branch=develop)\n\nA lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates.\n\n**[Documentation](http://momentjs.com/docs/)**\n\n## Port to ECMAScript 6 (version 2.10.0)\n\nMoment 2.10.0 does not bring any new features, but the code is now written in\nECMAScript 6 modules and placed inside `src/`. Previously `moment.js`, `locale/*.js` and\n`test/moment/*.js`, `test/locale/*.js` contained the source of the project. Now\nthe source is in `src/`, temporary build (ECMAScript 5) files are placed under\n`build/umd/` (for running tests during development), and the `moment.js` and\n`locale/*.js` files are updated only on release.\n\nIf you want to use a particular revision of the code, make sure to run\n`grunt transpile update-index`, so `moment.js` and `locales/*.js` are synced\nwith `src/*`. We might place that in a commit hook in the future.\n\n## Upgrading to 2.0.0\n\nThere are a number of small backwards incompatible changes with version 2.0.0. [See the full descriptions here](https://gist.github.com/timrwood/e72f2eef320ed9e37c51#backwards-incompatible-changes)\n\n * Changed language ordinal method to return the number + ordinal instead of just the ordinal.\n\n * Changed two digit year parsing cutoff to match strptime.\n\n * Removed `moment#sod` and `moment#eod` in favor of `moment#startOf` and `moment#endOf`.\n\n * Removed `moment.humanizeDuration()` in favor of `moment.duration().humanize()`.\n\n * Removed the lang data objects from the top level namespace.\n\n * Duplicate `Date` passed to `moment()` instead of referencing it.\n\n## [Changelog](https://github.com/moment/moment/blob/develop/CHANGELOG.md)\n\n## [Contributing](https://github.com/moment/moment/blob/develop/CONTRIBUTING.md)\n\nWe're looking for co-maintainers! If you want to become a master of time please\nwrite to [ichernev](https://github.com/ichernev).\n\n## License\n\nMoment.js is freely distributable under the terms of the [MIT license](https://github.com/moment/moment/blob/develop/LICENSE).\n\n[license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat\n[license-url]: LICENSE\n\n[npm-url]: https://npmjs.org/package/moment\n[npm-version-image]: http://img.shields.io/npm/v/moment.svg?style=flat\n[npm-downloads-image]: http://img.shields.io/npm/dm/moment.svg?style=flat\n\n[travis-url]: http://travis-ci.org/moment/moment\n[travis-image]: http://img.shields.io/travis/moment/moment/develop.svg?style=flat\n",
   "readmeFilename": "README.md",
-  "_id": "moment@2.17.1",
+  "readme": "[![npm version](https://badge.fury.io/js/scribe-js.svg)](http://badge.fury.io/js/scribe-js)  [![Build Status](https://travis-ci.org/bluejamesbond/Scribe.js.svg?branch=master)](https://travis-ci.org/bluejamesbond/Scribe.js)  \r\n   \r\n![Logo](https://raw.githubusercontent.com/bluejamesbond/Scribe.js/master/__misc/scribejs%20design%20logo%20%5Ba%5D.png)\r\n\r\n**Lightweight NodeJS Logging**\r\n\r\n#Overview\r\n\r\nUnlike many of the libraries out there, Scribe.js allows logging on multiple files and is divided into folders by date. And it is possibly the easiest logging you can implement.\r\n\r\n##WebPanel\r\n![webPanel](__misc/webPanelDemo.gif)  \r\n\r\n##Terminal\r\n![terminal](__misc/terminalDemo.png)  \r\n\r\n##Features\r\n\r\n- Allows you to use the `console` object (which provides easy integration with existing systems)\r\n- Save messages into JSON log files organized by user, date, and type or your custom rule\r\n- Print messages into console using customized colors (to indicate level of importance)\r\n- Adding context to logs such as time, tags, filename and line number\r\n- Handles logging Objects / Arrays\r\n- Log Express.js requests\r\n- Provides a developer API to access your logs\r\n- Features a rich HTML web panel to access logs from anywhere in the world\r\n\r\n#Live Demo\r\nYou can access a live demo of the library [here](https://bluejamesbond.github.io/Scribe.js/).\r\n\r\n#Wiki\r\n\r\nFor examples, tests, and API refer to the [Scribe.js Wiki](https://github.com/bluejamesbond/Scribe.js/wiki).\r\n\r\n#Installation\r\n```\r\nnpm install scribe-js\r\n```\r\n\r\n#Contributors\r\n\r\n- [bluejamesbond](https://github.com/bluejamesbond)\r\n- [guillaumewuip](https://github.com/guillaumewuip)\r\n",
+  "_id": "scribe-js@2.0.4",
   "dist": {
-    "shasum": "1f63d066ea3fad553451856ff718a90196bbe412"
+    "shasum": "792916b08494993de77c31be95b466d30c251a6c"
   },
-  "_from": "moment@^2.8.0",
-  "_resolved": "https://registry.npmjs.org/moment/-/moment-2.17.1.tgz"
+  "_from": "scribe-js@",
+  "_resolved": "https://registry.npmjs.org/scribe-js/-/scribe-js-2.0.4.tgz"
 }

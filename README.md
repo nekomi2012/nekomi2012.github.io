@@ -1,58 +1,43 @@
-[![Join the chat at https://gitter.im/moment/moment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/moment/moment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![npm version](https://badge.fury.io/js/scribe-js.svg)](http://badge.fury.io/js/scribe-js)  [![Build Status](https://travis-ci.org/bluejamesbond/Scribe.js.svg?branch=master)](https://travis-ci.org/bluejamesbond/Scribe.js)  
+   
+![Logo](https://raw.githubusercontent.com/bluejamesbond/Scribe.js/master/__misc/scribejs%20design%20logo%20%5Ba%5D.png)
 
-[![NPM version][npm-version-image]][npm-url] [![NPM downloads][npm-downloads-image]][npm-url] [![MIT License][license-image]][license-url] [![Build Status][travis-image]][travis-url]
-[![Coverage Status](https://coveralls.io/repos/moment/moment/badge.svg?branch=develop)](https://coveralls.io/r/moment/moment?branch=develop)
+**Lightweight NodeJS Logging**
 
-A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates.
+#Overview
 
-**[Documentation](http://momentjs.com/docs/)**
+Unlike many of the libraries out there, Scribe.js allows logging on multiple files and is divided into folders by date. And it is possibly the easiest logging you can implement.
 
-## Port to ECMAScript 6 (version 2.10.0)
+##WebPanel
+![webPanel](__misc/webPanelDemo.gif)  
 
-Moment 2.10.0 does not bring any new features, but the code is now written in
-ECMAScript 6 modules and placed inside `src/`. Previously `moment.js`, `locale/*.js` and
-`test/moment/*.js`, `test/locale/*.js` contained the source of the project. Now
-the source is in `src/`, temporary build (ECMAScript 5) files are placed under
-`build/umd/` (for running tests during development), and the `moment.js` and
-`locale/*.js` files are updated only on release.
+##Terminal
+![terminal](__misc/terminalDemo.png)  
 
-If you want to use a particular revision of the code, make sure to run
-`grunt transpile update-index`, so `moment.js` and `locales/*.js` are synced
-with `src/*`. We might place that in a commit hook in the future.
+##Features
 
-## Upgrading to 2.0.0
+- Allows you to use the `console` object (which provides easy integration with existing systems)
+- Save messages into JSON log files organized by user, date, and type or your custom rule
+- Print messages into console using customized colors (to indicate level of importance)
+- Adding context to logs such as time, tags, filename and line number
+- Handles logging Objects / Arrays
+- Log Express.js requests
+- Provides a developer API to access your logs
+- Features a rich HTML web panel to access logs from anywhere in the world
 
-There are a number of small backwards incompatible changes with version 2.0.0. [See the full descriptions here](https://gist.github.com/timrwood/e72f2eef320ed9e37c51#backwards-incompatible-changes)
+#Live Demo
+You can access a live demo of the library [here](https://bluejamesbond.github.io/Scribe.js/).
 
- * Changed language ordinal method to return the number + ordinal instead of just the ordinal.
+#Wiki
 
- * Changed two digit year parsing cutoff to match strptime.
+For examples, tests, and API refer to the [Scribe.js Wiki](https://github.com/bluejamesbond/Scribe.js/wiki).
 
- * Removed `moment#sod` and `moment#eod` in favor of `moment#startOf` and `moment#endOf`.
+#Installation
+```
+npm install scribe-js
+```
 
- * Removed `moment.humanizeDuration()` in favor of `moment.duration().humanize()`.
+#Contributors
 
- * Removed the lang data objects from the top level namespace.
-
- * Duplicate `Date` passed to `moment()` instead of referencing it.
-
-## [Changelog](https://github.com/moment/moment/blob/develop/CHANGELOG.md)
-
-## [Contributing](https://github.com/moment/moment/blob/develop/CONTRIBUTING.md)
-
-We're looking for co-maintainers! If you want to become a master of time please
-write to [ichernev](https://github.com/ichernev).
-
-## License
-
-Moment.js is freely distributable under the terms of the [MIT license](https://github.com/moment/moment/blob/develop/LICENSE).
-
-[license-image]: http://img.shields.io/badge/license-MIT-blue.svg?style=flat
-[license-url]: LICENSE
-
-[npm-url]: https://npmjs.org/package/moment
-[npm-version-image]: http://img.shields.io/npm/v/moment.svg?style=flat
-[npm-downloads-image]: http://img.shields.io/npm/dm/moment.svg?style=flat
-
-[travis-url]: http://travis-ci.org/moment/moment
-[travis-image]: http://img.shields.io/travis/moment/moment/develop.svg?style=flat
+- [bluejamesbond](https://github.com/bluejamesbond)
+- [guillaumewuip](https://github.com/guillaumewuip)
