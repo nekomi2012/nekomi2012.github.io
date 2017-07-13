@@ -1,5 +1,5 @@
 var convert = require('./convert'),
-    func = convert('constant', require('../constant'), require('./_falseOptions'));
+    func = convert('difference', require('../difference'));
 
 func.placeholder = require('./placeholder');
 module.exports = func;
