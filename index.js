@@ -1,6 +1,7 @@
 /*!
- * etag
- * Copyright(c) 2014-2015 Douglas Christopher Wilson
+ * range-parser
+ * Copyright(c) 2012-2014 TJ Holowaychuk
+ * Copyright(c) 2015-2016 Douglas Christopher Wilson
  * MIT Licensed
  */
 
@@ -11,122 +12,147 @@
  * @public
  */
 
-module.exports = etag
+module.exports = rangeParser
 
 /**
- * Module dependencies.
- * @private
- */
-
-var crypto = require('crypto')
-var Stats = require('fs').Stats
-
-/**
- * Module variables.
- * @private
- */
-
-var base64PadCharRegExp = /=+$/
-var toString = Object.prototype.toString
-
-/**
- * Generate an entity tag.
+ * Parse "Range" header `str` relative to the given file `size`.
  *
- * @param {Buffer|string} entity
- * @return {string}
- * @private
- */
-
-function entitytag(entity) {
-  if (entity.length === 0) {
-    // fast-path empty
-    return '"0-1B2M2Y8AsgTpgAmY7PhCfg"'
-  }
-
-  // compute hash of entity
-  var hash = crypto
-    .createHash('md5')
-    .update(entity, 'utf8')
-    .digest('base64')
-    .replace(base64PadCharRegExp, '')
-
-  // compute length of entity
-  var len = typeof entity === 'string'
-    ? Buffer.byteLength(entity, 'utf8')
-    : entity.length
-
-  return '"' + len.toString(16) + '-' + hash + '"'
-}
-
-/**
- * Create a simple ETag.
- *
- * @param {string|Buffer|Stats} entity
- * @param {object} [options]
- * @param {boolean} [options.weak]
- * @return {String}
+ * @param {Number} size
+ * @param {String} str
+ * @param {Object} [options]
+ * @return {Array}
  * @public
  */
 
-function etag(entity, options) {
-  if (entity == null) {
-    throw new TypeError('argument entity is required')
+function rangeParser (size, str, options) {
+  var index = str.indexOf('=')
+
+  if (index === -1) {
+    return -2
   }
 
-  // support fs.Stats object
-  var isStats = isstats(entity)
-  var weak = options && typeof options.weak === 'boolean'
-    ? options.weak
-    : isStats
+  // split the range string
+  var arr = str.slice(index + 1).split(',')
+  var ranges = []
 
-  // validate argument
-  if (!isStats && typeof entity !== 'string' && !Buffer.isBuffer(entity)) {
-    throw new TypeError('argument entity must be string, Buffer, or fs.Stats')
+  // add ranges type
+  ranges.type = str.slice(0, index)
+
+  // parse all ranges
+  for (var i = 0; i < arr.length; i++) {
+    var range = arr[i].split('-')
+    var start = parseInt(range[0], 10)
+    var end = parseInt(range[1], 10)
+
+    // -nnn
+    if (isNaN(start)) {
+      start = size - end
+      end = size - 1
+    // nnn-
+    } else if (isNaN(end)) {
+      end = size - 1
+    }
+
+    // limit last-byte-pos to current length
+    if (end > size - 1) {
+      end = size - 1
+    }
+
+    // invalid or unsatisifiable
+    if (isNaN(start) || isNaN(end) || start > end || start < 0) {
+      continue
+    }
+
+    // add range
+    ranges.push({
+      start: start,
+      end: end
+    })
   }
 
-  // generate entity tag
-  var tag = isStats
-    ? stattag(entity)
-    : entitytag(entity)
+  if (ranges.length < 1) {
+    // unsatisifiable
+    return -1
+  }
 
-  return weak
-    ? 'W/' + tag
-    : tag
+  return options && options.combine
+    ? combineRanges(ranges)
+    : ranges
 }
 
 /**
- * Determine if object is a Stats object.
- *
- * @param {object} obj
- * @return {boolean}
- * @api private
- */
-
-function isstats(obj) {
-  // genuine fs.Stats
-  if (typeof Stats === 'function' && obj instanceof Stats) {
-    return true
-  }
-
-  // quack quack
-  return obj && typeof obj === 'object'
-    && 'ctime' in obj && toString.call(obj.ctime) === '[object Date]'
-    && 'mtime' in obj && toString.call(obj.mtime) === '[object Date]'
-    && 'ino' in obj && typeof obj.ino === 'number'
-    && 'size' in obj && typeof obj.size === 'number'
-}
-
-/**
- * Generate a tag for a stat.
- *
- * @param {object} stat
- * @return {string}
+ * Combine overlapping & adjacent ranges.
  * @private
  */
 
-function stattag(stat) {
-  var mtime = stat.mtime.getTime().toString(16)
-  var size = stat.size.toString(16)
+function combineRanges (ranges) {
+  var ordered = ranges.map(mapWithIndex).sort(sortByRangeStart)
 
-  return '"' + size + '-' + mtime + '"'
+  for (var j = 0, i = 1; i < ordered.length; i++) {
+    var range = ordered[i]
+    var current = ordered[j]
+
+    if (range.start > current.end + 1) {
+      // next range
+      ordered[++j] = range
+    } else if (range.end > current.end) {
+      // extend range
+      current.end = range.end
+      current.index = Math.min(current.index, range.index)
+    }
+  }
+
+  // trim ordered array
+  ordered.length = j + 1
+
+  // generate combined range
+  var combined = ordered.sort(sortByRangeIndex).map(mapWithoutIndex)
+
+  // copy ranges type
+  combined.type = ranges.type
+
+  return combined
+}
+
+/**
+ * Map function to add index value to ranges.
+ * @private
+ */
+
+function mapWithIndex (range, index) {
+  return {
+    start: range.start,
+    end: range.end,
+    index: index
+  }
+}
+
+/**
+ * Map function to remove index value from ranges.
+ * @private
+ */
+
+function mapWithoutIndex (range) {
+  return {
+    start: range.start,
+    end: range.end
+  }
+}
+
+/**
+ * Sort function to sort ranges by index.
+ * @private
+ */
+
+function sortByRangeIndex (a, b) {
+  return a.index - b.index
+}
+
+/**
+ * Sort function to sort ranges by start position.
+ * @private
+ */
+
+function sortByRangeStart (a, b) {
+  return a.start - b.start
 }

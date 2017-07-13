@@ -1,71 +1,51 @@
-1.7.0 / 2015-06-08
+1.2.0 / 2016-06-01
 ==================
 
-  * Always include entity length in ETags for hash length extensions
-  * Generate non-Stats ETags using MD5 only (no longer CRC32)
-  * Improve stat performance by removing hashing
-  * Remove base64 padding in ETags to shorten
-  * Use MD5 instead of MD4 in weak ETags over 1KB
+  * Add `combine` option to combine overlapping ranges
 
-1.6.0 / 2015-05-10
+1.1.0 / 2016-05-13
 ==================
 
-  * Improve support for JXcore
-  * Remove requirement of `atime` in the stats object
-  * Support "fake" stats objects in environments without `fs`
+  * Fix incorrectly returning -1 when there is at least one valid range
+  * perf: remove internal function
 
-1.5.1 / 2014-11-19
+1.0.3 / 2015-10-29
 ==================
 
-  * deps: crc@3.2.1
-    - Minor fixes
+  * perf: enable strict mode
 
-1.5.0 / 2014-10-14
+1.0.2 / 2014-09-08
 ==================
 
-  * Improve string performance
-  * Slightly improve speed for weak ETags over 1KB
-
-1.4.0 / 2014-09-21
-==================
-
-  * Support "fake" stats objects
   * Support Node.js 0.6
 
-1.3.1 / 2014-09-14
+1.0.1 / 2014-09-07
 ==================
 
-  * Use the (new and improved) `crc` for crc32
+  * Move repository to jshttp
 
-1.3.0 / 2014-08-29
+1.0.0 / 2013-12-11
 ==================
 
-  * Default strings to strong ETags
-  * Improve speed for weak ETags over 1KB
+  * Add repository to package.json
+  * Add MIT license
 
-1.2.1 / 2014-08-29
+0.0.4 / 2012-06-17
 ==================
 
-  * Use the (much faster) `buffer-crc32` for crc32
+  * Change ret -1 for unsatisfiable and -2 when invalid
 
-1.2.0 / 2014-08-24
+0.0.3 / 2012-06-17
 ==================
 
-  * Add support for file stat objects
+  * Fix last-byte-pos default to len - 1
 
-1.1.0 / 2014-08-24
+0.0.2 / 2012-06-14
 ==================
 
-  * Add fast-path for empty entity
-  * Add weak ETag generation
-  * Shrink size of generated ETags
+  * Add `.type`
 
-1.0.1 / 2014-08-24
-==================
-
-  * Fix behavior of string containing Unicode
-
-1.0.0 / 2014-05-18
+0.0.1 / 2012-06-11
 ==================
 
   * Initial release
