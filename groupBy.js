@@ -1,5 +1,5 @@
 var convert = require('./convert'),
-    func = convert('filter', require('../filter'));
+    func = convert('groupBy', require('../groupBy'));
 
 func.placeholder = require('./placeholder');
 module.exports = func;
